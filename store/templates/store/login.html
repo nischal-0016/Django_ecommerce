@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PCGeek</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<style>
+    .message {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid transparent;
+        border-radius: 5px;
+    }
+    .message.info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+    .message.error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+</style>
+<body>
+    <header>
+        <h1>PCGeek - Login</h1>
+    </header>
+
+    <main>
+        <h2>Login to Your Account</h2>
+
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+
+            <div>
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 PCGeek - All rights reserved</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - PCGeek</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>PCGeek - Register</h1>
+    </header>
+
+    <main>
+        <h2>Create Your Account</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div>
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+            </div>
+            
+            <div>
+                <label for="id_first_name">First Name:</label>
+                {{ form.first_name }}
+            </div>
+            
+            <div>
+                <label for="id_last_name">Last Name:</label>
+                {{ form.last_name }}
+            </div>
+
+            <div>
+                <label for="id_email">Email:</label>
+                {{ form.email }}
+            </div>
+
+            <div>
+                <label for="id_password1">Password:</label>
+                {{ form.password1 }}
+            </div>
+
+            <div>
+                <label for="id_password2">Confirm Password:</label>
+                {{ form.password2 }}
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 PCGeek - All rights reserved</p>
+    </footer>
+</body>
+</html>
