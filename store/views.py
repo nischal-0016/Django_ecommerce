@@ -1,10 +1,9 @@
-from .models import Product, Category
-from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm  # Ensure there's a space after the `from`
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from .models import Product, Category, Cart  
+from .forms import CustomUserCreationForm
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products
@@ -15,10 +14,12 @@ def category_list(request):
     return render(request, 'store/category_list.html', {'categories': categories})
 
 def product_detail(request, pk):
-    product = Product.objects.get(id=pk)  # Fetch a specific product by its ID
-    return render(request, 'store/product_detail.html', {'product': product})
+    product = get_object_or_404(Product, id=pk)  # Fetch the specific product by its ID
+    context = {
+        'product': product,
+    } 
+    return render(request, 'store/product_detail.html', context)
 
-# views.py
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -29,7 +30,6 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'store/register.html', {'form': form})
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -48,3 +48,21 @@ def login_view(request):
                 messages.error(request, 'Invalid username or password.')
 
     return render(request, 'store/login.html')
+
+def add_to_cart(request, pk):
+    if not request.user.is_authenticated:
+        messages.warning(request, 'You need to log in to add items to the cart.')
+        return redirect('login')
+
+    product = get_object_or_404(Product, pk=pk)
+    user = request.user
+
+    # Get or create a Cart item for the user and product
+    cart_item, created = Cart.objects.get_or_create(user=user, product=product)
+
+    if not created:
+        cart_item.quantity += 1  # Increment quantity if already in cart
+        cart_item.save()
+
+    messages.success(request, f'Added {product.name} to your cart.')
+    return redirect('product_detail', pk=pk)  # Redirect back to product detail
