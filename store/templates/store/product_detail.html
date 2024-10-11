@@ -1,30 +1,120 @@
-<!-- product_detail.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - PCGeek</title>
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #461616;
+        }
+
+        .product-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .product-detail img {
+            max-width: 100vh;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .product-detail h2 {
+            margin: 10px 0;
+        }
+
+        .add-to-cart-button {
+            padding: 10px 15px;
+            background-color: #451b1b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #80341f;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+    <script>
+        function addToCart(productId) {
+            fetch(`/product/${productId}/add-to-cart/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ 'quantity': 1 })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                // Update the cart count displayed on the icon
+                document.querySelector('.cart-count').textContent = data.cart_count;
+                alert('Item added to cart!');
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
+        }
+    </script>
 </head>
-<style>
-    .product-image {
-    width: 300px;  
-    height: auto;  
-    max-width: 100%; 
-}
-</style>
 <body>
     <header>
-        <h1>{{ product.name }}</h1>
+        <h1>PCGeek</h1>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="#">Custom PC build</a>
+            <a href="#">Contact Us</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">{{ cart_count }}</span>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">{{ cart_count }}</span>
+                </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-button">Login</a>
+            {% endif %}
+        </nav>
     </header>
 
     <main>
         <div class="product-detail">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-            <h2>Price: ${{ product.price }}</h2>
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.price }} USD</p>
             <p>{{ product.description }}</p>
-            <button>Add to Cart</button>
+            <button class="add-to-cart-button" onclick="addToCart({{ product.id }})">Add to Cart</button>
         </div>
     </main>
 

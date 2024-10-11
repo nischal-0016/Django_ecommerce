@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart  
+from .models import Product, Category, Cart,CartItem
 from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products
@@ -51,18 +53,36 @@ def login_view(request):
 
 def add_to_cart(request, pk):
     if not request.user.is_authenticated:
-        messages.warning(request, 'You need to log in to add items to the cart.')
-        return redirect('login')
+        return JsonResponse({'error': 'You need to log in to add items to the cart.'}, status=403)
 
     product = get_object_or_404(Product, pk=pk)
     user = request.user
 
-    # Get or create a Cart item for the user and product
-    cart_item, created = Cart.objects.get_or_create(user=user, product=product)
+    # Get or create a Cart for the user
+    cart, created = Cart.objects.get_or_create(user=user)
+
+    # Get or create a CartItem for the cart and product
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
     if not created:
         cart_item.quantity += 1  # Increment quantity if already in cart
         cart_item.save()
 
-    messages.success(request, f'Added {product.name} to your cart.')
-    return redirect('product_detail', pk=pk)  # Redirect back to product detail
+    # Calculate the total items in cart
+    cart_count = CartItem.objects.filter(cart=cart).count()  # Count the items in the cart
+
+    return JsonResponse({'cart_count': cart_count})
+
+@login_required
+def cart_view(request):
+    user = request.user
+    cart = get_object_or_404(Cart, user=user)  # Fetch the user's cart
+    cart_items = cart.cart_items.all()  # Fetch the cart items for the user's cart
+
+    total_price = sum(item.total_price() for item in cart_items)  # Calculate total price
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'store/cart.html', context)
