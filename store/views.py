@@ -53,36 +53,58 @@ def login_view(request):
 
 def add_to_cart(request, pk):
     if not request.user.is_authenticated:
-        return JsonResponse({'error': 'You need to log in to add items to the cart.'}, status=403)
+        # Redirect to login if not authenticated
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
 
+    # Get the product by its primary key
     product = get_object_or_404(Product, pk=pk)
-    user = request.user
 
-    # Get or create a Cart for the user
-    cart, created = Cart.objects.get_or_create(user=user)
+    # Get or create a cart for the logged-in user
+    cart, created = Cart.objects.get_or_create(user=request.user)
 
-    # Get or create a CartItem for the cart and product
+    # Get or create a cart item for the product
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
     if not created:
-        cart_item.quantity += 1  # Increment quantity if already in cart
+        # If the cart item already exists, increment the quantity
+        cart_item.quantity += 1
         cart_item.save()
 
-    # Calculate the total items in cart
-    cart_count = CartItem.objects.filter(cart=cart).count()  # Count the items in the cart
+    # Respond with JSON to update the cart count
+    return JsonResponse({
+        'cart_count': cart.total_items(),
+        'message': 'Item added to cart successfully'
+    })
 
-    return JsonResponse({'cart_count': cart_count})
-
-@login_required
 def cart_view(request):
-    user = request.user
-    cart = get_object_or_404(Cart, user=user)  # Fetch the user's cart
-    cart_items = cart.cart_items.all()  # Fetch the cart items for the user's cart
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Try to get the cart for the logged-in user, or create one if it doesn't exist
+        cart, created = Cart.objects.get_or_create(user=request.user)
 
-    total_price = sum(item.total_price() for item in cart_items)  # Calculate total price
+        # Get all cart items for the current user's cart
+        cart_items = cart.cart_items.all()
 
-    context = {
-        'cart_items': cart_items,
-        'total_price': total_price,
-    }
-    return render(request, 'store/cart.html', context)
+        # Calculate the total price of items in the cart
+        total_price = sum(item.total_price() for item in cart_items)
+
+        # Pass cart items and total price to the template
+        return render(request, 'store/cart.html', {  # Ensure the correct path to cart.html
+            'cart_items': cart_items,
+            'total_price': total_price,
+            'cart_count': cart.total_items(),  # Ensure total_items() is correctly defined in your Cart model
+        })
+    else:
+        # Redirect to login if the user is not authenticated
+        return redirect('login')
+    
+def remove_from_cart(request, item_id):
+    if request.user.is_authenticated:
+        # Get the cart item by ID and delete it
+        cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+        cart_item.delete()
+
+    # Redirect back to the cart page
+    return redirect('cart')
+
+

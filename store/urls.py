@@ -18,4 +18,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),  # Logout view
     
     path('cart/', views.cart_view, name='cart'),  # Cart view URL
+
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 ]

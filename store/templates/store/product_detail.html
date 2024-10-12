@@ -46,6 +46,27 @@
             background-color: #80341f;
         }
 
+        /* Custom Pop-up */
+        .cart-popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #451b1b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .cart-popup.show {
+            display: block;
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .product-detail {
                 flex-direction: column;
@@ -56,13 +77,15 @@
     </style>
     <script>
         function addToCart(productId) {
+            const formData = new FormData();
+            formData.append('quantity', 1);
+
             fetch(`/product/${productId}/add-to-cart/`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                body: JSON.stringify({ 'quantity': 1 })
+                body: formData
             })
             .then(response => {
                 if (response.ok) {
@@ -71,11 +94,32 @@
                 throw new Error('Network response was not ok.');
             })
             .then(data => {
-                // Update the cart count displayed on the icon
-                document.querySelector('.cart-count').textContent = data.cart_count;
-                alert('Item added to cart!');
+                // Update the cart count if applicable (assuming you add cart count functionality)
+                const cartCountElement = document.querySelector('.cart-count');
+                if (cartCountElement && data.cart_count) {
+                    cartCountElement.textContent = data.cart_count;
+                }
+
+                // Show the popup message
+                showPopup('Item added to cart!');
             })
-            .catch(error => console.error('There was a problem with the fetch operation:', error));
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                showPopup('Failed to add item to cart. Please try again.');
+            });
+        }
+
+        function showPopup(message) {
+            // Get the popup element
+            const popup = document.querySelector('.cart-popup');
+            // Set the message
+            popup.textContent = message;
+            // Show the popup
+            popup.classList.add('show');
+            // Hide the popup after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 5000);
         }
     </script>
 </head>
@@ -89,12 +133,11 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">{{ cart_count }}</span>
+                    {% comment %} <span class="cart-count">{{ cart_count }}</span> {% endcomment %}
                 </a>
             {% else %}
                 <a href="{% url 'login' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">{{ cart_count }}</span>
                 </a>
             {% endif %}
             {% if user.is_authenticated %}
@@ -112,11 +155,14 @@
         <div class="product-detail">
             <img src="{{ product.image.url }}" alt="{{ product.name }}">
             <h2>{{ product.name }}</h2>
-            <p>{{ product.price }} USD</p>
+            <p>{{ product.price }} Rs</p>
             <p>{{ product.description }}</p>
             <button class="add-to-cart-button" onclick="addToCart({{ product.id }})">Add to Cart</button>
         </div>
     </main>
+
+    <!-- Custom Popup -->
+    <div class="cart-popup"></div>
 
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
