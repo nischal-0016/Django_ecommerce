@@ -5,12 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - PCGeek</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}">  -->
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             color: #461616;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #451b1b;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
         }
 
         .product-detail {
@@ -21,7 +40,7 @@
         }
 
         .product-detail img {
-            max-width: 100vh;
+            max-width: 80vh; 
             height: auto;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -46,9 +65,9 @@
             background-color: #80341f;
         }
 
-        /* Custom Pop-up */
         .cart-popup {
-            display: none;
+            visibility: hidden;  /* Hidden by default */
+            opacity: 0;  /* Fully transparent by default */
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -58,12 +77,13 @@
             border-radius: 5px;
             font-size: 16px;
             z-index: 1000;
-            transition: opacity 0.5s ease;
+            transition: visibility 0s linear 0.5s, opacity 0.5s linear; /* Delay visibility change */
         }
-
+        
         .cart-popup.show {
-            display: block;
-            opacity: 1;
+            visibility: visible;  /* Show the popup */
+            opacity: 1;  /* Fully opaque */
+            transition: opacity 0.5s linear;  /* Transition for opacity */
         }
 
         @media (max-width: 768px) {
@@ -102,9 +122,6 @@
                 throw new Error('Network response was not ok.');
             })
             .then(data => {
-                // Update the cart count on the page
-                document.querySelector('.cart-count').textContent = data.cart_count;
-    
                 // Show the popup message
                 showPopup('Item added to cart!');
             })
@@ -117,7 +134,7 @@
             popup.classList.add('show');
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 3000);
+            }, 3000); // Keep the popup visible for 3 seconds
         }
     </script>
     
@@ -129,17 +146,21 @@
             <a href="{% url 'home' %}">Home</a>
             <a href="#">Custom PC build</a>
             <a href="#">Contact Us</a>
+    
+            <!-- Cart link for authenticated users -->
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">{{ cart_count }}</span>
+                    <i class="fas fa-shopping-cart"></i> Cart
                 </a>
             {% else %}
-                <a href="{% url 'login' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
+                <!-- Redirect to login if user is not authenticated -->
+                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
                 </a>
             {% endif %}
+    
             {% if user.is_authenticated %}
+                <!-- Logout form -->
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
@@ -149,7 +170,7 @@
             {% endif %}
         </nav>
     </header>
-
+    
     <main>
         <div class="product-detail">
             <img src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -167,7 +188,7 @@
 
     <!-- Custom Popup -->
     <div class="cart-popup"></div>
-
+    
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
     </footer>
