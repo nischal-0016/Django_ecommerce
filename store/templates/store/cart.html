@@ -51,18 +51,23 @@
             align-items: center;
         }
 
-        .cart-item button {
-            background-color: #ff3d3d;
-            color: #ffffff;
+        .cart-item input[type="number"] {
+            width: 50px;
+            padding: 5px;
+        }
+
+        .update-button, .delete-button {
+            background-color: #451b1b;
+            color: white;
             border: none;
             padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-left: 10px;
         }
 
-        .cart-item button:hover {
-            background-color: #d32f2f;
+        .update-button:hover, .delete-button:hover {
+            background-color: #80341f;
         }
 
         .total-price {
@@ -78,6 +83,54 @@
         }
     </style>
 </head>
+<script>
+    function updateQuantity(productId, itemId) {
+        const quantity = document.getElementById('quantity-' + itemId).value;
+        const formData = new FormData();
+        formData.append('quantity', quantity);
+
+        fetch(`/cart/update/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            document.getElementById('total-' + itemId).textContent = data.item_total_price + ' USD';
+            document.getElementById('total-price').textContent = data.total_cart_price + ' USD';
+        })
+        .catch(error => console.error('Error updating quantity:', error));
+    }
+
+    function deleteItem(itemId) {
+        fetch(`/cart/remove/${itemId}/`, {  // Correct URL
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Ensure the CSRF token is sent
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            // Remove the item from the page
+            document.getElementById('cart-item-' + itemId).remove();
+            // Update the total price of the cart
+            document.getElementById('total-price').textContent = data.total_cart_price + ' USD';
+        })
+        .catch(error => console.error('Error deleting item:', error));
+    }
+</script>
 <body>
     <header>
         <h1>Your Shopping Cart</h1>
@@ -100,23 +153,19 @@
         {% if cart_items %}
             <ul>
                 {% for item in cart_items %}
-                    <li class="cart-item">
-                        <div>
-                            <strong>{{ item.product.name }}</strong> - 
-                            Price: {{ item.product.price }} Rs - 
-                            Quantity: {{ item.quantity }} - 
-                            Total: {{ item.total_price }} Rs
-                        </div>
-                        <!-- Delete Button -->
-                        <form method="post" action="{% url 'remove_from_cart' item.id %}">
-                            {% csrf_token %}
-                            <button type="submit">Delete</button>
-                        </form>
+                    <li class="cart-item" id="cart-item-{{ item.id }}">
+                        <strong>{{ item.product.name }}</strong> - 
+                        Price: {{ item.product.price }} USD - 
+                        Quantity:
+                        <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
+                        <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">Update</button>
+                        <button class="delete-button" onclick="deleteItem({{ item.id }})">Delete</button>
+                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} USD</span>
                     </li>
                 {% endfor %}
             </ul>
             <div class="total-price">
-                <strong>Total Price of Cart: {{ total_price }} Rs</strong>
+                <strong>Total Price of Cart: <span id="total-price">{{ total_price }} USD</span></strong>
             </div>
         {% else %}
             <p>Your cart is empty.</p>

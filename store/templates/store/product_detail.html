@@ -59,7 +59,6 @@
             font-size: 16px;
             z-index: 1000;
             transition: opacity 0.5s ease;
-            opacity: 0;
         }
 
         .cart-popup.show {
@@ -76,10 +75,19 @@
         }
     </style>
     <script>
+        const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};  // Pass authentication status to JS
+    
         function addToCart(productId) {
+            // If user is not authenticated, redirect to login page
+            if (!isAuthenticated) {
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";  // Redirect to login page with 'next' parameter
+                return;
+            }
+    
+            const quantity = document.getElementById('quantity-input').value;
             const formData = new FormData();
-            formData.append('quantity', 1);
-
+            formData.append('quantity', quantity);
+    
             fetch(`/product/${productId}/add-to-cart/`, {
                 method: 'POST',
                 headers: {
@@ -94,34 +102,25 @@
                 throw new Error('Network response was not ok.');
             })
             .then(data => {
-                // Update the cart count if applicable (assuming you add cart count functionality)
-                const cartCountElement = document.querySelector('.cart-count');
-                if (cartCountElement && data.cart_count) {
-                    cartCountElement.textContent = data.cart_count;
-                }
-
+                // Update the cart count on the page
+                document.querySelector('.cart-count').textContent = data.cart_count;
+    
                 // Show the popup message
                 showPopup('Item added to cart!');
             })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-                showPopup('Failed to add item to cart. Please try again.');
-            });
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
         }
-
+    
         function showPopup(message) {
-            // Get the popup element
             const popup = document.querySelector('.cart-popup');
-            // Set the message
             popup.textContent = message;
-            // Show the popup
             popup.classList.add('show');
-            // Hide the popup after 3 seconds
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 5000);
+            }, 3000);
         }
     </script>
+    
 </head>
 <body>
     <header>
@@ -133,7 +132,7 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
-                    {% comment %} <span class="cart-count">{{ cart_count }}</span> {% endcomment %}
+                    <span class="cart-count">{{ cart_count }}</span>
                 </a>
             {% else %}
                 <a href="{% url 'login' %}" class="cart-icon">
@@ -157,6 +156,11 @@
             <h2>{{ product.name }}</h2>
             <p>{{ product.price }} Rs</p>
             <p>{{ product.description }}</p>
+            
+            <!-- Add Quantity Input Field -->
+            <label for="quantity-input">Quantity:</label>
+            <input type="number" id="quantity-input" name="quantity" value="1" min="1">
+
             <button class="add-to-cart-button" onclick="addToCart({{ product.id }})">Add to Cart</button>
         </div>
     </main>
