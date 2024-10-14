@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart, CartItem
-from .forms import CustomUserCreationForm
+from .models import Product, Category, Cart, CartItem, Profile
+from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .forms import UserUpdateForm, ProfileUpdateForm
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products
@@ -24,15 +23,11 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Registration successful! You are now logged in.')
-            return redirect('home')  # Redirect to a success page or homepage
-        else:
-            messages.error(request, 'Please correct the error below.')
+            form.save()
+            messages.success(request, 'Registration successful! Please log in.')
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
-
     return render(request, 'store/register.html', {'form': form})
 
 def login_view(request):
@@ -121,19 +116,26 @@ def update_cart_quantity(request, product_id):
 
 @login_required
 def profile(request):
+    # Ensure the user has a profile, create it if it doesn't exist
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(request.POST, instance=profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
             return redirect('profile')  # Redirect to the profile page after saving
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        profile_form = ProfileUpdateForm(instance=profile)
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'store/profile.html', context)

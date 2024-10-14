@@ -1,77 +1,16 @@
+<!-- Use product_list.html as the base template -->
 {% extends 'store/product_list.html' %}
+
 {% block content %}
-<header>
-    <h1>PCGeek</h1>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="#">Custom PC build</a>
-        <a href="#">Contact Us</a>
+<div class="container mt-5">
+    <h2>User Profile</h2>
+    <p><strong>First Name:</strong> {{ request.user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ request.user.last_name }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+    <p><strong>Address:</strong> {{ profile.address }}</p>
+    <p><strong>Contact Number:</strong> {{ profile.contact_number }}</p>
 
-        <!-- Cart Icon -->
-        {% if user.is_authenticated %}
-            <a href="{% url 'cart' %}" class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}" class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-            </a>
-        {% endif %}
-
-        <!-- Profile Button -->
-        {% if user.is_authenticated %}
-            <!-- Show the user's name and link to their profile -->
-            <a href="{% url 'profile' %}" class="profile-button">
-                {{ user.username }}
-            </a>
-        {% else %}
-            <!-- Show a generic Profile button for unauthenticated users -->
-            <a href="{% url 'login' %}" class="profile-button">Profile</a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <!-- Logout form -->
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="logout-button">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}" class="login-button">Login</a>
-        {% endif %}
-    </nav>
-</header>
-
-<div class="container">
-    <h2>{{ request.user.username }}'s Profile</h2>
-    
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="first_name">First Name</label>
-            {{ user_form.first_name }}
-        </div>
-        
-        <div class="form-group">
-            <label for="last_name">Last Name</label>
-            {{ user_form.last_name }}
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            {{ user_form.email }}
-        </div>
-
-        <div class="form-group">
-            <label for="address">Address</label>
-            {{ profile_form.address }}
-        </div>
-
-        <div class="form-group">
-            <label for="contact_number">Contact Number</label>
-            {{ profile_form.contact_number }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Profile</button>
-    </form>
+    <!-- Edit profile button if you want to link it to the edit form -->
+    <a href="{% url 'profile_edit' %}" class="btn btn-primary mt-3">Edit Profile</a>
 </div>
 {% endblock %}
