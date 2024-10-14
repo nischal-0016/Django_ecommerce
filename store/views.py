@@ -6,6 +6,7 @@ from .models import Product, Category, Cart, CartItem
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products
@@ -23,11 +24,15 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Registration successful! Please log in.')
-            return redirect('login')
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful! You are now logged in.')
+            return redirect('home')  # Redirect to a success page or homepage
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
         form = CustomUserCreationForm()
+
     return render(request, 'store/register.html', {'form': form})
 
 def login_view(request):
@@ -113,3 +118,22 @@ def update_cart_quantity(request, product_id):
             'total_cart_price': total_cart_price
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('profile')  # Redirect to the profile page after saving
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
+    return render(request, 'profile.html', context)
