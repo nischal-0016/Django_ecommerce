@@ -22,12 +22,12 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
-class UserUpdateForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
-class ProfileUpdateForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['address', 'contact_number']

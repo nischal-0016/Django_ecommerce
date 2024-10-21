@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Product, Category, Cart, CartItem, Profile
-from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
+from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
@@ -116,26 +116,21 @@ def update_cart_quantity(request, product_id):
 
 @login_required
 def profile(request):
-    # Ensure the user has a profile, create it if it doesn't exist
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
     if request.method == 'POST':
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, instance=profile)
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated successfully.')
-            return redirect('profile')  # Redirect to the profile page after saving
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
-        user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=profile)
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
 
-    context = {
+    return render(request, 'store/profile.html', {
         'user_form': user_form,
         'profile_form': profile_form
-    }
-    return render(request, 'store/profile.html', context)
+    })

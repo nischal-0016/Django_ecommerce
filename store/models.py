@@ -50,22 +50,8 @@ class CartItem(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    contact_number = models.CharField(max_length=15, blank=True, null=True)
-
+    address = models.CharField(max_length=255, blank=True, default='Not Provided')
+    contact_number = models.CharField(max_length=15, blank=True,default='Not Porvided')
+    
     def __str__(self):
-        return f"{self.user.username}'s Profile"
-
-
-# Signals to create and save Profile automatically
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, **kwargs):
-    # Only save the profile if it exists
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
+        return self.user.username
