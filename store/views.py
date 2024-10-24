@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Product, Category, Cart, CartItem, Profile
@@ -117,20 +117,22 @@ def update_cart_quantity(request, product_id):
 @login_required
 def profile(request):
     if request.method == 'POST':
+        # Handle the user form and profile form
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)  # Assuming Profile is related to User
+
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            return redirect('profile')
-        else:
-            messages.error(request, 'Please correct the errors below.')
+
+            # Show success message
+            return redirect('profile')  # Reload the page to clear POST data and show updated data
     else:
+        # Prepopulate forms with current user data
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
 
     return render(request, 'store/profile.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
     })

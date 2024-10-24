@@ -1,3 +1,4 @@
+<!-- index/base -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -70,18 +71,19 @@
             color: #80341f;
         }
 
-        .login-button, .logout-button {
-            padding: 10px 20px;
-            background-color: #451b1b;
-            color: white;
+        nav a, .logout-button {
+            background: #451b1b;
+            color: #ffffff;
             text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
             border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            transition: background 0.3s;
         }
 
-        .login-button:hover, .logout-button:hover {
-            background-color: #80341f;
+        nav a:hover, .logout-button:hover {
+            background: #80341f;
         }
 
         footer {

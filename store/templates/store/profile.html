@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ request.user.username }}'s Profile - PCGeek</title>
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
     <style>
         /* General Page Styling */
         body {
@@ -78,6 +77,12 @@
             border-radius: 5px;
         }
         
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;  /* Move the button to the right */
+            margin-top: 20px;
+        }
+
         button.btn-primary {
             background-color: #451b1b;
             color: #ffffff;
@@ -92,45 +97,22 @@
         button.btn-primary:hover {
             background-color: #80341f;
         }
-
-        .cart-popup {
-            visibility: hidden;  /* Hidden by default */
-            opacity: 0;  /* Fully transparent by default */
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #451b1b;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            z-index: 1000;
-            transition: visibility 0s linear 0.5s, opacity 0.5s linear; /* Delay visibility change */
-        }
-        
-        .cart-popup.show {
-            visibility: visible;  /* Show the popup */
-            opacity: 1;  /* Fully opaque */
-            transition: opacity 0.5s linear;  /* Transition for opacity */
-        }
-
-        .login-button, .logout-button {
-            padding: 10px 20px;
-            background-color: #451b1b;
-            color: white;
+        nav a, .logout-button {
+            background: #451b1b;
+            color: #ffffff;
             text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
             border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            display: inline-block;
-            margin-left: 10px;
+            transition: background 0.3s;
         }
 
-        .login-button:hover, .logout-button:hover {
-            background-color: #80341f;
+        nav a:hover, .logout-button:hover {
+            background: #80341f;
         }
 
-        /* Pop-up Styling (Bottom-Right) */
+        /* Pop-up Styling */
         .popup {
             visibility: hidden;
             opacity: 0;
@@ -179,10 +161,18 @@
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
             {% else %}
-                <!-- Redirect to login if user is not authenticated -->
                 <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <!-- Logout form -->
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-button">Login</a>
             {% endif %}
         </nav>
     </header>
@@ -202,23 +192,25 @@
                     <label for="last_name">Last Name</label>
                     {{ user_form.last_name }}
                 </div>
-
+            
                 <div class="form-group">
                     <label for="email">Email</label>
                     {{ user_form.email }}
                 </div>
-
+            
                 <div class="form-group">
                     <label for="address">Address</label>
                     {{ profile_form.address }}
                 </div>
-
+            
                 <div class="form-group">
                     <label for="contact_number">Contact Number</label>
                     {{ profile_form.contact_number }}
                 </div>
-
-                <button type="submit" class="btn btn-primary">Update Profile</button>
+            
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </div>
             </form>
         </div>
         
@@ -234,13 +226,21 @@
 
     <script>
         function showPopup(event) {
-            event.preventDefault();
+            event.preventDefault();  // Prevent immediate form submission
+            const form = event.target;
             const popup = document.getElementById('profile-popup');
+
             popup.classList.add('show');
-            
+
+            // Wait 3 seconds before submitting the form
+            setTimeout(() => {
+                form.submit();  // Submit the form after 3 seconds
+            }, 3000);  // Display the pop-up for 3 seconds
+
+            // Hide the pop-up after 3.5 seconds
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 3000); // Hide after 3 seconds
+            }, 3500);  // Adjust this timing to ensure it hides after the form is submitted
         }
     </script>
 </body>

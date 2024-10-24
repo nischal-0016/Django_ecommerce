@@ -136,7 +136,19 @@
         <h1>Your Shopping Cart</h1>
         <nav>
             <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'cart' %}">Cart</a>
+            <a href="#">Custom PC build</a>
+            <a href="#">Contact Us</a>
+            <!-- Profile Button -->
+            {% if user.is_authenticated %}
+                <!-- Show the user's name and link to their profile -->
+                <a href="{% url 'profile' %}" class="profile-button">
+                    {{ user.username }}
+                </a>
+            {% else %}
+                <!-- Show a generic Profile button for unauthenticated users -->
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
+            {% endif %}
+            
             {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
