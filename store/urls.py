@@ -28,4 +28,10 @@ urlpatterns = [
 
     path('profile/', views.profile, name='profile'),
 
+    path('custom-pc-build/', views.custom_pc_build, name='custom_pc_build'),
+
+    path('custom-pc-build/intel/', views.intel_build, name='intel_build'),  # Intel build URL
+    
+    path('custom-pc-build/amd/', views.amd_build, name='amd_build'),        # AMD build URL
+
 ]

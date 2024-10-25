@@ -1,0 +1,139 @@
+<!-- custom_pc_build.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom PC Build</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #461616;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #451b1b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Navbar Styling */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background-color: #451b1b;
+            padding: 10px 0;
+        }
+
+        nav a, .logout-button {
+            background: #451b1b;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover, .logout-button:hover {
+            background: #80341f;
+        }
+
+        /* Custom PC Options */
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            color: #fcfafa;
+        }
+
+        .option-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .option {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: 220px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #4d1919;
+            color: white;
+            margin-top: 50px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PCGeek</h1>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
+            <a href="#">Contact Us</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-button">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <h1>Choose Your Processor</h1>
+    <div class="option-container">
+        <a href="{% url 'intel_build' %}">
+            <div class="option">
+                <h2>Intel</h2>
+                <p>Build a PC with Intel processors</p>
+            </div>
+        </a>
+        <a href="{% url 'amd_build' %}">
+            <div class="option">
+                <h2>AMD Ryzen</h2>
+                <p>Build a PC with AMD Ryzen processors</p>
+            </div>
+        </a>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 PCGeek - All rights reserved</p>
+    </footer>
+</body>
+</html>

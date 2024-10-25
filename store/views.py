@@ -136,3 +136,12 @@ def profile(request):
         'user_form': user_form,
         'profile_form': profile_form,
     })
+
+def custom_pc_build(request):
+    return render(request, 'store/custom_pc_build.html')
+
+def intel_build(request):
+    return render(request, 'intel_build.html')  # Placeholder view for Intel
+
+def amd_build(request):
+    return render(request, 'amd_build.html')    # Placeholder view for AMD
