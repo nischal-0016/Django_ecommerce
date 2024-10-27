@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart, CartItem, Profile
+from .models import Product, Category, Cart, CartItem, Profile,IntelProduct
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -145,3 +145,16 @@ def intel_build(request):
 
 def amd_build(request):
     return render(request, 'amd_build.html')    # Placeholder view for AMD
+
+def intel_build(request):
+    categories = Category.objects.all()  
+    if 'category_id' in request.GET:
+        category_id = request.GET['category_id']
+        products = IntelProduct.objects.filter(category_id=category_id)
+    else:
+        products = IntelProduct.objects.all()
+    context = {
+        'categories': categories,
+        'products': products,
+    }
+    return render(request, 'store/intel_build.html', context)

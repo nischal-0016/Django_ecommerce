@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Intel PC Build</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #451b1b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .title {
+            color: #ffffff;
+        }
+
+        /* Navbar Styling */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background-color: #451b1b;
+            padding: 10px 0;
+        }
+
+        nav a, .logout-button {
+            background: #451b1b;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover, .logout-button:hover {
+            background: #80341f;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #451b1b;
+        }
+
+        /* Categories Styling */
+        .categories {
+            margin-bottom: 20px;
+        }
+
+        .categories h2 {
+            margin-bottom: 10px;
+        }
+
+        .categories ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+            display: flex; /* Use flexbox for layout */
+            flex-wrap: wrap; /* Allow items to wrap */
+            gap: 10px; /* Space between items */
+        }
+
+        .categories li {
+            background: #f0f0f0; /* Light background for category items */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px 15px; /* Padding around text */
+            transition: background 0.3s; /* Smooth transition */
+        }
+
+        .categories li a {
+            text-decoration: none; /* Remove underline */
+            color: #451b1b; /* Text color */
+        }
+
+        .categories li:hover {
+            background: #e0e0e0; /* Darker background on hover */
+        }
+
+        /* Product List Styling */
+        .product-list {
+            margin: 10px 0;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .product-btn {
+            background-color: #80341f;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .product-btn:hover {
+            background-color: #5c2b1b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: #4d1919;
+            color: white;
+            margin-top: 50px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">PCGeek - Intel PC Build</h1>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
+            <a href="#">Contact Us</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="profile-button">{{ user.username }}</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-button">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Select Your Components</h1>
+
+        <!-- Category Selection -->
+        <div class="categories">
+            <h2>Categories</h2>
+            <ul>
+                {% for category in categories %}
+                    <li>
+                        <a href="?category_id={{ category.id }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Product List -->
+        <h2>Products</h2>
+        {% if products %}
+            <div class="product-list">
+                {% for product in products %}
+                    <div class="product-item">
+                        <span>{{ product.name }} - ${{ product.price }}</span>
+                        <form action="{% url 'add_to_cart' product.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="product-btn">Add to Cart</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No products found in this category.</p>
+        {% endif %}
+
+        <div class="component">
+            <h2>Total Price: $<span id="total-price">0.00</span></h2>
+            <a href="#" class="product-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 PCGeek - All rights reserved</p>
+    </footer>
+</body>
+</html>
