@@ -141,20 +141,21 @@ def custom_pc_build(request):
     return render(request, 'store/custom_pc_build.html')
 
 def intel_build(request):
-    return render(request, 'intel_build.html')  # Placeholder view for Intel
-
-def amd_build(request):
-    return render(request, 'amd_build.html')    # Placeholder view for AMD
-
-def intel_build(request):
-    categories = Category.objects.all()  
-    if 'category_id' in request.GET:
-        category_id = request.GET['category_id']
+    category_id = request.GET.get('category_id')
+    categories = Category.objects.all()  # Fetch all categories from the database
+    
+    # Fetch products only if a category_id is provided
+    if category_id:
         products = IntelProduct.objects.filter(category_id=category_id)
     else:
-        products = IntelProduct.objects.all()
+        products = []  # Set products to an empty list if no category is selected
+
     context = {
         'categories': categories,
         'products': products,
     }
     return render(request, 'store/intel_build.html', context)
+
+
+def amd_build(request):
+    return render(request, 'amd_build.html')    # Placeholder view for AMD
