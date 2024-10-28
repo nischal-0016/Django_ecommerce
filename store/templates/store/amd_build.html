@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title>Intel PC Build</title>
+    <title>AMD Ryzen PC Build</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -155,7 +155,7 @@
 </head>
 <body>
     <header>
-        <h1 class="title">PCGeek - Intel PC Build</h1>
+        <h1 class="title">PCGeek - AMD Ryzen PC Build</h1>
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
@@ -189,9 +189,8 @@
     </header>
 
     <div class="container">
-        <h1>Select Your Components</h1>
-    
-        <!-- Category Selection -->
+        <h1>Select Your AMD Components</h1>
+
         <div class="categories">
             <h2>Categories</h2>
             <ul>
@@ -202,10 +201,9 @@
                 {% endfor %}
             </ul>
         </div>
-    
-        <!-- Product List, only if a category is selected -->
+
+        <h2>Products</h2>
         {% if products %}
-            <h2>Products</h2>
             <div class="product-list">
                 {% for product in products %}
                     <div class="product-item">
@@ -219,13 +217,8 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Please select a category to view products.</p>
+            <p>No products found in this category.</p>
         {% endif %}
-    
-        <div class="component">
-            <h2>Total Price: Rs<span id="total-price">0.00</span></h2>
-            <a href="#" class="product-btn">Proceed to Checkout</a>
-        </div>
     </div>
 
     <footer>

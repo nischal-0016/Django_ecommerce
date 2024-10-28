@@ -34,7 +34,7 @@ urlpatterns = [
 
     path('custom-pc-build/intel/', views.intel_build, name='intel_build'),  # Intel build URL
     
-    path('custom-pc-build/amd/', views.amd_build, name='amd_build'),        # AMD build URL
+    path('custom-pc-build/amd/', views.amd_pc_build, name='amd_build'),
 
 ]
 if settings.DEBUG:

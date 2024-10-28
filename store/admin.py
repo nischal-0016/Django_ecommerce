@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Profile, IntelProduct
+from .models import Category, Product, Profile, IntelProduct,AMDProduct
 
 # Custom Admin class for IntelProduct
 class IntelProductAdmin(admin.ModelAdmin):
@@ -11,4 +11,5 @@ class IntelProductAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(Profile)
-admin.site.register(IntelProduct, IntelProductAdmin)  # Use the custom admin class for IntelProduct
+admin.site.register(IntelProduct, IntelProductAdmin)
+admin.site.register(AMDProduct)
