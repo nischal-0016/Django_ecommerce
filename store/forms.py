@@ -31,3 +31,8 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['address', 'contact_number']
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']  

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ request.user.username }}'s Profile - PCGeek</title>
     <style>
-        /* General Page Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -154,7 +153,6 @@
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
-            <a href="#">Contact Us</a>
         
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
@@ -164,6 +162,15 @@
                 <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <!-- Show the user's name and link to their profile -->
+                <a href="{% url 'profile' %}" class="profile-button">
+                    {{ user.username }}
+                </a>
+            {% else %}
+                <!-- Show a generic Profile button for unauthenticated users -->
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
             {% if user.is_authenticated %}
                 <!-- Logout form -->
@@ -183,6 +190,11 @@
             
             <form method="POST" onsubmit="showPopup(event)">
                 {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ request.user.username }}">
+                </div>
+                
                 <div class="form-group">
                     <label for="first_name">First Name</label>
                     {{ user_form.first_name }}
@@ -232,7 +244,7 @@
 
             popup.classList.add('show');
 
-            // Wait 3 seconds before submitting the form
+           
             setTimeout(() => {
                 form.submit();  // Submit the form after 3 seconds
             }, 3000);  // Display the pop-up for 3 seconds
@@ -240,7 +252,7 @@
             // Hide the pop-up after 3.5 seconds
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 3500);  // Adjust this timing to ensure it hides after the form is submitted
+            }, 2500); 
         }
     </script>
 </body>

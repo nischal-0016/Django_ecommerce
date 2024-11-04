@@ -142,7 +142,15 @@
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
-            <a href="#">Contact Us</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            {% endif %}
             <!-- Profile Button -->
             {% if user.is_authenticated %}
                 <!-- Show the user's name and link to their profile -->

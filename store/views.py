@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Product, Category, Cart, CartItem, Profile,IntelProduct,AMDProduct
-from .forms import CustomUserCreationForm, UserForm, ProfileForm
+from .forms import CustomUserCreationForm, UserForm, ProfileForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
