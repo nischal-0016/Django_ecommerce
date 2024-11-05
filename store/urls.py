@@ -36,6 +36,9 @@ urlpatterns = [
     
     path('custom-pc-build/amd/', views.amd_pc_build, name='amd_build'),
 
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart')
+
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -172,3 +172,22 @@ def amd_pc_build(request):
         'products': products,
     }
     return render(request, 'store/amd_build.html', context)
+
+def add_to_cart(request, product_id):
+    # Fetch the product
+    product = get_object_or_404(Product, id=product_id)
+
+    # Get or create the cart associated with the user
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    # Check if the item is already in the cart
+    cart_item, item_created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+        defaults={'quantity': 1}
+    )
+    if not item_created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('store/cart.html')  # Redirect to the cart page

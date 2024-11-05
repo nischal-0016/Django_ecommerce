@@ -48,59 +48,65 @@
             background: #80341f;
         }
 
-        /* Container Styling */
+        /* Main Container Styling */
         .container {
-            max-width: 1000px;
-            margin: 20px auto;
+            display: flex;
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 20px;
-            background-color: white;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         h1, h2 {
             color: #451b1b;
-        }
-
-        /* Categories Styling */
-        .categories {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .categories h2 {
             margin-bottom: 10px;
         }
 
-        .categories ul {
-            list-style-type: none;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-right: 20px;
         }
 
-        .categories li {
+        .sidebar h2 {
+            font-size: 1.2rem;
+            color: #451b1b;
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
             background: #e8e8e8;
+            padding: 10px;
             border-radius: 5px;
-            padding: 10px 15px;
+            cursor: pointer;
             transition: background 0.3s;
         }
 
-        .categories li a {
-            text-decoration: none;
-            color: #451b1b;
+        .sidebar li:hover {
+            background: #d0d0d0;
         }
 
-        .categories li:hover {
-            background: #d0d0d0;
+        .sidebar li a {
+            text-decoration: none;
+            color: #451b1b;
+            font-weight: bold;
         }
 
         /* Product List Styling */
         .product-list {
+            flex: 1;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
@@ -114,7 +120,7 @@
             background: #fff;
             border-radius: 8px;
             padding: 15px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s;
         }
 
@@ -123,33 +129,36 @@
             height: auto;
             margin-bottom: 10px;
             border-radius: 5px;
+            border: 1px solid #ddd;
         }
 
         .product-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .product-btn {
             background-color: #80341f;
             color: white;
-            padding: 5px 10px;
+            padding: 8px 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
         .product-btn:hover {
             background-color: #5c2b1b;
         }
 
+        /* Footer Styling */
         footer {
             text-align: center;
             padding: 15px 0;
             background-color: #4d1919;
             color: white;
-            margin-top: 50px;
-            width: 100%;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -188,9 +197,8 @@
     </header>
 
     <div class="container">
-        <h1>Select Your AMD Components</h1>
-
-        <div class="categories">
+        <!-- Sidebar for Categories -->
+        <div class="sidebar">
             <h2>Categories</h2>
             <ul>
                 {% for category in categories %}
@@ -201,9 +209,10 @@
             </ul>
         </div>
 
-        <h2>Products</h2>
-        {% if products %}
-            <div class="product-list">
+        <!-- Product List, only if a category is selected -->
+        <div class="product-list">
+            <h2>Products</h2>
+            {% if products %}
                 {% for product in products %}
                     <div class="product-item">
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -214,10 +223,10 @@
                         </form>
                     </div>
                 {% endfor %}
-            </div>
-        {% else %}
-            <p>No products found in this category.</p>
-        {% endif %}
+            {% else %}
+                <p>Please select a category to view products.</p>
+            {% endif %}
+        </div>
     </div>
 
     <footer>

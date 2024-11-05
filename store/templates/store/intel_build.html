@@ -14,13 +14,14 @@
         }
 
         header {
-            background-color: #451b1b;
+            background: linear-gradient(135deg, #451b1b, #6a2e2e);
             color: white;
             padding: 20px;
             text-align: center;
         }
 
         .title {
+            font-size: 2rem;
             color: #ffffff;
         }
 
@@ -29,78 +30,83 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            background-color: #451b1b;
-            padding: 10px 0;
+            background: #6a2e2e;
+            padding: 12px;
         }
 
-        nav a, .logout-button {
-            background: #451b1b;
+        nav a, .logout-button, .login-button {
+            background: #6a2e2e;
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 15px;
-            margin: 0 5px;
-            border: none;
+            padding: 8px 15px;
             border-radius: 5px;
-            transition: background 0.3s;
+            transition: background 0.3s, border-color 0.3s;
         }
 
-        nav a:hover, .logout-button:hover {
+        nav a:hover, .logout-button:hover, .login-button:hover {
             background: #80341f;
+            border-color: #ffffff;
         }
 
-        /* Container Styling */
+        /* Main Container Styling */
         .container {
-            max-width: 1000px;
-            margin: 20px auto;
+            display: flex;
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 20px;
-            background-color: white;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         h1, h2 {
             color: #451b1b;
-        }
-
-        /* Categories Styling */
-        .categories {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .categories h2 {
             margin-bottom: 10px;
         }
 
-        .categories ul {
-            list-style-type: none;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-right: 20px;
         }
 
-        .categories li {
+        .sidebar h2 {
+            font-size: 1.2rem;
+            color: #451b1b;
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
             background: #e8e8e8;
+            padding: 10px;
             border-radius: 5px;
-            padding: 10px 15px;
+            cursor: pointer;
             transition: background 0.3s;
         }
 
-        .categories li a {
-            text-decoration: none;
-            color: #451b1b;
+        .sidebar li:hover {
+            background: #d0d0d0;
         }
 
-        .categories li:hover {
-            background: #d0d0d0;
+        .sidebar li a {
+            text-decoration: none;
+            color: #451b1b;
+            font-weight: bold;
         }
 
         /* Product List Styling */
         .product-list {
+            flex: 1;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
@@ -114,7 +120,7 @@
             background: #fff;
             border-radius: 8px;
             padding: 15px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s;
         }
 
@@ -123,33 +129,36 @@
             height: auto;
             margin-bottom: 10px;
             border-radius: 5px;
+            border: 1px solid #ddd;
         }
 
         .product-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .product-btn {
             background-color: #80341f;
             color: white;
-            padding: 5px 10px;
+            padding: 8px 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
         .product-btn:hover {
             background-color: #5c2b1b;
         }
 
+        /* Footer Styling */
         footer {
             text-align: center;
             padding: 15px 0;
             background-color: #4d1919;
             color: white;
-            margin-top: 50px;
-            width: 100%;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -159,39 +168,28 @@
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
-
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
-            {% else %}
-                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                </a>
-            {% endif %}
-            
-            {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">{{ user.username }}</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="profile-button">Profile</a>
-            {% endif %}
-
-            {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
             {% else %}
+                <a href="{% url 'login' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
                 <a href="{% url 'login' %}" class="login-button">Login</a>
             {% endif %}
         </nav>
     </header>
 
     <div class="container">
-        <h1>Select Your Components</h1>
-    
-        <!-- Category Selection -->
-        <div class="categories">
+        <!-- Sidebar for Categories -->
+        <div class="sidebar">
             <h2>Categories</h2>
             <ul>
                 {% for category in categories %}
@@ -201,11 +199,10 @@
                 {% endfor %}
             </ul>
         </div>
-    
+
         <!-- Product List, only if a category is selected -->
-        {% if products %}
-            <h2>Products</h2>
-            <div class="product-list">
+        <div class="product-list">
+            {% if products %}
                 {% for product in products %}
                     <div class="product-item">
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -216,14 +213,9 @@
                         </form>
                     </div>
                 {% endfor %}
-            </div>
-        {% else %}
-            <p>Please select a category to view products.</p>
-        {% endif %}
-    
-        <div class="component">
-            <h2>Total Price: Rs<span id="total-price">0.00</span></h2>
-            <a href="#" class="product-btn">Proceed to Checkout</a>
+            {% else %}
+                <p>Please select a category to view products.</p>
+            {% endif %}
         </div>
     </div>
 
