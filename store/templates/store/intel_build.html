@@ -14,14 +14,13 @@
         }
 
         header {
-            background: linear-gradient(135deg, #451b1b, #6a2e2e);
+            background-color: #451b1b;
             color: white;
             padding: 20px;
             text-align: center;
         }
 
         .title {
-            font-size: 2rem;
             color: #ffffff;
         }
 
@@ -30,22 +29,23 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            background: #6a2e2e;
-            padding: 12px;
+            background-color: #451b1b;
+            padding: 10px 0;
         }
 
-        nav a, .logout-button, .login-button {
-            background: #6a2e2e;
+        nav a, .logout-button {
+            background: #451b1b;
             color: #ffffff;
             text-decoration: none;
-            padding: 8px 15px;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
             border-radius: 5px;
-            transition: background 0.3s, border-color 0.3s;
+            transition: background 0.3s;
         }
 
-        nav a:hover, .logout-button:hover, .login-button:hover {
+        nav a:hover, .logout-button:hover {
             background: #80341f;
-            border-color: #ffffff;
         }
 
         /* Main Container Styling */
@@ -190,7 +190,6 @@
     <div class="container">
         <!-- Sidebar for Categories -->
         <div class="sidebar">
-            <h2>Categories</h2>
             <ul>
                 {% for category in categories %}
                     <li>

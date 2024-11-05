@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - PCGeek</title>
-    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}">  -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +31,6 @@
             text-decoration: none;
         }
         nav a, .logout-button {
-            
             background: #451b1b;
             color: #ffffff;
             text-decoration: none;
@@ -93,7 +91,7 @@
             z-index: 1000;
             transition: visibility 0s linear 0.5s, opacity 0.5s linear; /* Delay visibility change */
         }
-        
+
         .cart-popup.show {
             visibility: visible;  /* Show the popup */
             opacity: 1;  /* Fully opaque */
@@ -112,16 +110,17 @@
         const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};  // Pass authentication status to JS
     
         function addToCart(productId) {
+            console.log("Add to Cart button clicked");
             // If user is not authenticated, redirect to login page
             if (!isAuthenticated) {
                 window.location.href = "{% url 'login' %}?next={{ request.path }}";  // Redirect to login page with 'next' parameter
                 return;
             }
-    
+        
             const quantity = document.getElementById('quantity-input').value;
             const formData = new FormData();
             formData.append('quantity', quantity);
-    
+        
             fetch(`/product/${productId}/add-to-cart/`, {
                 method: 'POST',
                 headers: {
@@ -130,14 +129,21 @@
                 body: formData
             })
             .then(response => {
+                console.log("Response status:", response.status);
                 if (response.ok) {
-                    return response.json();
+                    return response.json(); 
+                } else {
+                    throw new Error('Network response was not ok.');
                 }
-                throw new Error('Network response was not ok.');
             })
             .then(data => {
-                // Show the popup message
-                showPopup('Item added to cart!');
+                console.log("Data received from server:", data);
+                // Check if the response includes a success message
+                if (data.success) {
+                    showPopup('Item added to cart!');
+                } else {
+                    showPopup('Failed to add item to cart.'); // Handle errors appropriately
+                }
             })
             .catch(error => console.error('There was a problem with the fetch operation:', error));
         }
@@ -146,12 +152,12 @@
             const popup = document.querySelector('.cart-popup');
             popup.textContent = message;
             popup.classList.add('show');
+            console.log("Showing popup:", message);
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 3000); // Keep the popup visible for 3 seconds
+            }, 2000);
         }
     </script>
-    
 </head>
 <body>
     <header>
@@ -170,6 +176,12 @@
                 <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="profile-button">{{ user.username }}</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
     
             {% if user.is_authenticated %}

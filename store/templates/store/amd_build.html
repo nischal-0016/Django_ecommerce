@@ -199,7 +199,6 @@
     <div class="container">
         <!-- Sidebar for Categories -->
         <div class="sidebar">
-            <h2>Categories</h2>
             <ul>
                 {% for category in categories %}
                     <li>
@@ -211,7 +210,6 @@
 
         <!-- Product List, only if a category is selected -->
         <div class="product-list">
-            <h2>Products</h2>
             {% if products %}
                 {% for product in products %}
                     <div class="product-item">
