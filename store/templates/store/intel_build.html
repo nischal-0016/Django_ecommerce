@@ -195,7 +195,9 @@
                     <div class="product-item">
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         <span>{{ product.name }} - Rs {{ product.price }}</span>
-                        <form action="{% url 'add_to_cart' product.id %}" method="post">
+        
+                        <!-- Form to add the product to the cart with quantity -->
+                        <form action="{% url 'add_intel_product_to_cart' product.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="product-btn">Add to Cart</button>
                         </form>

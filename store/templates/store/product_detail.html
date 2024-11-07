@@ -107,52 +107,50 @@
         }
     </style>
     <script>
-        const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};  // Pass authentication status to JS
+        const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
     
         function addToCart(productId) {
             console.log("Add to Cart button clicked");
-            // If user is not authenticated, redirect to login page
+
             if (!isAuthenticated) {
-                window.location.href = "{% url 'login' %}?next={{ request.path }}";  // Redirect to login page with 'next' parameter
+                const nextUrl = encodeURIComponent(window.location.pathname);
+                window.location.href = `{% url 'login' %}?next=${nextUrl}`;
                 return;
             }
-        
+    
             const quantity = document.getElementById('quantity-input').value;
             const formData = new FormData();
             formData.append('quantity', quantity);
-        
+
+            // Send the request to add the product to the cart
             fetch(`/product/${productId}/add-to-cart/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
                 body: formData
             })
             .then(response => {
-                console.log("Response status:", response.status);
                 if (response.ok) {
-                    return response.json(); 
+                    return response.json();
                 } else {
                     throw new Error('Network response was not ok.');
                 }
             })
             .then(data => {
-                console.log("Data received from server:", data);
-                // Check if the response includes a success message
                 if (data.success) {
                     showPopup('Item added to cart!');
                 } else {
-                    showPopup('Failed to add item to cart.'); // Handle errors appropriately
+                    showPopup('Failed to add item to cart.');
                 }
             })
-            .catch(error => console.error('There was a problem with the fetch operation:', error));
+            .catch(error => console.error('Fetch error:', error));
         }
     
         function showPopup(message) {
             const popup = document.querySelector('.cart-popup');
             popup.textContent = message;
             popup.classList.add('show');
-            console.log("Showing popup:", message);
             setTimeout(() => {
                 popup.classList.remove('show');
             }, 2000);
@@ -202,12 +200,12 @@
             <h2>{{ product.name }}</h2>
             <p>{{ product.price }} Rs</p>
             <p>{{ product.description }}</p>
-            
-            <!-- Add Quantity Input Field -->
+    
             <label for="quantity-input">Quantity:</label>
             <input type="number" id="quantity-input" name="quantity" value="1" min="1">
-
-            <button class="add-to-cart-button" onclick="addToCart({{ product.id }})">Add to Cart</button>
+    
+            <!-- Button to trigger the JavaScript add to cart function -->
+            <button type="button" onclick="addToCart('{{ product.id }}')" class="add-to-cart-button">Add to Cart</button>
         </div>
     </main>
 

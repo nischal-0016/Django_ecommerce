@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart, CartItem, Profile, IntelProduct, AMDProduct, IntelCategory, AMDCategory
+from .models import Product, Category, Cart, CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.contrib.contenttypes.models import ContentType
 
 # View to list all products
 def product_list(request):
@@ -155,7 +156,6 @@ def add_amd_product_to_cart(request, product_id):
         cart_item.save()
 
     return JsonResponse({'success': True, 'message': 'AMD product added to cart'})
-
 # Remove item from cart
 @login_required
 def remove_from_cart(request, item_id):

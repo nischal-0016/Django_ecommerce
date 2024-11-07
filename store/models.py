@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 class Category(models.Model):
@@ -12,10 +14,11 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    id = models.CharField(primary_key=True, max_length=100)  
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products')
     image = models.ImageField(upload_to='products/', blank=True, null=True, help_text="Upload an image of the product")
 
     def __str__(self):
@@ -30,15 +33,16 @@ class IntelCategory(models.Model):
 
 
 class IntelProduct(models.Model):
+    id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)
-    category = models.ForeignKey(IntelCategory, on_delete=models.CASCADE, related_name='intel_products')
+    category = models.ForeignKey('IntelCategory', on_delete=models.CASCADE, related_name='intel_products')
     image = models.ImageField(upload_to='intel_products/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} - ${self.price:.2f}"
-
+    
 # Separate category model for AMD products
 class AMDCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -48,15 +52,16 @@ class AMDCategory(models.Model):
 
 # AMD-specific product model linked to AMDCategory
 class AMDProduct(models.Model):
+    id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)
-    category = models.ForeignKey(AMDCategory, on_delete=models.CASCADE, related_name='amd_products')
+    category = models.ForeignKey('AMDCategory', on_delete=models.CASCADE, related_name='amd_products')
     image = models.ImageField(upload_to='amd_products/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} - ${self.price:.2f}"
-
+    
 # Cart model for users
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
@@ -70,18 +75,32 @@ class Cart(models.Model):
     def total_price(self):
         return sum(item.total_price() for item in self.cart_items.all())
 
-# Cart item model for adding products to the cart
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items')
+    
+    # Separate foreign keys for different product types
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
+    intel_product = models.ForeignKey(IntelProduct, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
+    amd_product = models.ForeignKey(AMDProduct, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
+
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.name} in {self.cart.user.username}'s cart"
+        if self.product:
+            return f"{self.quantity} of {self.product.name} in {self.cart.user.username}'s cart"
+        elif self.intel_product:
+            return f"{self.quantity} of {self.intel_product.name} in {self.cart.user.username}'s cart"
+        elif self.amd_product:
+            return f"{self.quantity} of {self.amd_product.name} in {self.cart.user.username}'s cart"
 
     def total_price(self):
-        return self.quantity * self.product.price
+        if self.product:
+            return self.quantity * self.product.price
+        elif self.intel_product:
+            return self.quantity * self.intel_product.price
+        elif self.amd_product:
+            return self.quantity * self.amd_product.price
 
 # Profile model for user information
 class Profile(models.Model):
