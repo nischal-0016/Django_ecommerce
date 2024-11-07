@@ -3,14 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Main Category model for homepage
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
 
-# Product model linked to the main Category model for homepage products
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -21,14 +21,14 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name} - ${self.price:.2f}"
 
-# Separate category model for Intel products
+
 class IntelCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
 
-# Intel-specific product model linked to IntelCategory
+
 class IntelProduct(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
