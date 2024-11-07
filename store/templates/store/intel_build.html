@@ -3,6 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intel PC Build</title>
     <style>
         body {
@@ -51,6 +52,7 @@
         /* Main Container Styling */
         .container {
             display: flex;
+            flex-wrap: wrap;
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
@@ -59,25 +61,18 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        h1, h2 {
+        h1 {
             color: #451b1b;
-            margin-bottom: 10px;
         }
 
         /* Sidebar Styling */
         .sidebar {
-            width: 250px;
+            flex: 1 1 250px;
             padding: 20px;
             background: #f8f8f8;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin-right: 20px;
-        }
-
-        .sidebar h2 {
-            font-size: 1.2rem;
-            color: #451b1b;
-            margin-bottom: 10px;
         }
 
         .sidebar ul {
@@ -87,26 +82,26 @@
 
         .sidebar li {
             margin-bottom: 10px;
-            background: #e8e8e8;
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
         }
 
-        .sidebar li:hover {
-            background: #d0d0d0;
+        .sidebar li.selected {
+            background: #80341f;
+            color: #fff;
         }
 
         .sidebar li a {
             text-decoration: none;
-            color: #451b1b;
+            color: inherit;
             font-weight: bold;
         }
 
         /* Product List Styling */
         .product-list {
-            flex: 1;
+            flex: 3;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
@@ -130,10 +125,6 @@
             margin-bottom: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
-        }
-
-        .product-item:hover {
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .product-btn {
@@ -169,20 +160,18 @@
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
             {% if user.is_authenticated %}
-                <a href="{% url 'cart' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i> Cart
+                <a href="{% url 'cart' %}">
+                    <i class="fas fa-shopping-cart"></i> Cart 
                 </a>
-                <a href="{% url 'profile' %}" class="profile-button">{{ user.username }}</a>
+                <a href="{% url 'profile' %}">{{ user.username }}</a>
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                </a>
-                <a href="{% url 'login' %}" class="profile-button">Profile</a>
-                <a href="{% url 'login' %}" class="login-button">Login</a>
+                <a href="{% url 'login' %}">Cart</a>
+                <a href="{% url 'login' %}">Profile</a>
+                <a href="{% url 'login' %}">Login</a>
             {% endif %}
         </nav>
     </header>
@@ -192,7 +181,7 @@
         <div class="sidebar">
             <ul>
                 {% for category in categories %}
-                    <li>
+                    <li class="{% if category.id|stringformat:"s" == request.GET.category_id %}selected{% endif %}">
                         <a href="?category_id={{ category.id }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}

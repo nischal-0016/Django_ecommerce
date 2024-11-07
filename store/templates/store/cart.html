@@ -180,17 +180,17 @@
                 {% for item in cart_items %}
                     <li class="cart-item" id="cart-item-{{ item.id }}">
                         <strong>{{ item.product.name }}</strong> - 
-                        Price: {{ item.product.price }} USD - 
+                        Price: {{ item.product.price }} Rs. - 
                         Quantity:
                         <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
                         <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">Update</button>
                         <button class="delete-button" onclick="deleteItem({{ item.id }})">Delete</button>
-                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} USD</span>
+                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} Rs</span>
                     </li>
                 {% endfor %}
             </ul>
             <div class="total-price">
-                <strong>Total Price of Cart: <span id="total-price">{{ total_price }} USD</span></strong>
+                <strong>Total Price of Cart: <span id="total-price">{{ total_price }} Rs.</span></strong>
             </div>
         {% else %}
             <p>Your cart is empty.</p>

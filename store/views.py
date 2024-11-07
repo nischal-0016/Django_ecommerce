@@ -1,24 +1,28 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart, CartItem, Profile,IntelProduct,AMDProduct
-from .forms import CustomUserCreationForm, UserForm, ProfileForm, UserForm
+from .models import Product, Category, Cart, CartItem, Profile, IntelProduct, AMDProduct, IntelCategory, AMDCategory
+from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
+# View to list all products
 def product_list(request):
-    products = Product.objects.all()  # Fetch all products
+    products = Product.objects.all()
     return render(request, 'store/product_list.html', {'products': products})
 
+# View to list all categories on homepage
 def category_list(request):
-    categories = Category.objects.all()  # Fetch all categories
+    categories = Category.objects.all()
     return render(request, 'store/category_list.html', {'categories': categories})
 
+# View to show product details
 def product_detail(request, pk):
-    product = get_object_or_404(Product, id=pk)  # Fetch the specific product by its ID
+    product = get_object_or_404(Product, id=pk)
     return render(request, 'store/product_detail.html', {'product': product})
 
+# User registration view
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -30,6 +34,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'store/register.html', {'form': form})
 
+# User login view
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -38,7 +43,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')  # Redirect to your desired page after login
+            return redirect('home')
         else:
             if not User.objects.filter(username=username).exists():
                 messages.info(request, 'This username does not exist. Please register.')
@@ -47,26 +52,59 @@ def login_view(request):
 
     return render(request, 'store/login.html')
 
-# @login_required
-# def add_to_cart(request, product_id):
-#     if request.method == 'POST':
-#         product = get_object_or_404(Product, id=product_id)
-#         quantity = int(request.POST.get('quantity', 1))
+# User profile view with form handling
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
 
-#         cart, _ = Cart.objects.get_or_create(user=request.user)  # Get or create cart for the user
-#         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
 
-#         if created:
-#             cart_item.quantity = quantity
-#         else:
-#             cart_item.quantity += quantity
-#         cart_item.save()
+    return render(request, 'store/profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
 
-#         cart_count = cart.cart_items.count()
+# View for Intel PC build page
+def intel_build(request):
+    category_id = request.GET.get('category_id')
+    categories = IntelCategory.objects.all()
+    
+    if category_id:
+        products = IntelProduct.objects.filter(category_id=category_id)
+    else:
+        products = []
 
-#         return JsonResponse({'cart_count': cart_count})
-#     return JsonResponse({'error': 'Invalid request'}, status=400)
+    context = {
+        'categories': categories,
+        'products': products,
+    }
+    return render(request, 'store/intel_build.html', context)
 
+# View for AMD PC build page
+def amd_pc_build(request):
+    category_id = request.GET.get('category_id')
+    categories = AMDCategory.objects.all()
+    
+    if category_id:
+        products = AMDProduct.objects.filter(category_id=category_id)
+    else:
+        products = []
+
+    context = {
+        'categories': categories,
+        'products': products,
+    }
+    return render(request, 'store/amd_build.html', context)
+
+# Cart view to display cart items
 @login_required
 def cart_view(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -79,18 +117,57 @@ def cart_view(request):
         'cart_count': cart.total_items(),
     })
 
+# Add product to cart (general)
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return JsonResponse({'success': True, 'message': 'Product added to cart'})
+
+# Add Intel product to cart
+@login_required
+def add_intel_product_to_cart(request, product_id):
+    product = get_object_or_404(IntelProduct, id=product_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return JsonResponse({'success': True, 'message': 'Intel product added to cart'})
+
+# Add AMD product to cart
+@login_required
+def add_amd_product_to_cart(request, product_id):
+    product = get_object_or_404(AMDProduct, id=product_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, amd_product=product)
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return JsonResponse({'success': True, 'message': 'AMD product added to cart'})
+
+# Remove item from cart
 @login_required
 def remove_from_cart(request, item_id):
     if request.method == 'POST':
         cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-        cart_item.delete()  # Delete the cart item
-
-        # Calculate the updated total price for the cart
+        cart_item.delete()
         total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
-        return JsonResponse({'total_cart_price': total_cart_price})  # Return updated total price
+        return JsonResponse({'total_cart_price': total_cart_price})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+# Update cart quantity
 @login_required
 def update_cart_quantity(request, product_id):
     if request.method == 'POST':
@@ -98,13 +175,11 @@ def update_cart_quantity(request, product_id):
         cart_item = get_object_or_404(CartItem, product=product, cart__user=request.user)
         quantity = int(request.POST.get('quantity', 1))
 
-        # Ensure the quantity is at least 1
         if quantity < 1:
             return JsonResponse({'error': 'Quantity must be at least 1.'}, status=400)
 
         cart_item.quantity = quantity
         cart_item.save()
-
         item_total_price = cart_item.total_price()
         total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
@@ -114,84 +189,25 @@ def update_cart_quantity(request, product_id):
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        # Handle the user form and profile form
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)  # Assuming Profile is related to User
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-
-            # Show success message
-            return redirect('profile')  # Reload the page to clear POST data and show updated data
-    else:
-        # Prepopulate forms with current user data
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-
-    return render(request, 'store/profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form,
-    })
-
 def custom_pc_build(request):
-    return render(request, 'store/custom_pc_build.html')
-
-def intel_build(request):
     category_id = request.GET.get('category_id')
-    categories = Category.objects.all()  # Fetch all categories from the database
+    pc_type = request.GET.get('pc_type')  # 'intel' or 'amd'
     
-    # Fetch products only if a category_id is provided
-    if category_id:
-        products = IntelProduct.objects.filter(category_id=category_id)
-    else:
-        products = []  # Set products to an empty list if no category is selected
+    categories = None
+    products = []
 
+    if pc_type == 'intel':
+        categories = IntelCategory.objects.all()
+        if category_id:
+            products = IntelProduct.objects.filter(category_id=category_id)
+    elif pc_type == 'amd':
+        categories = AMDCategory.objects.all()
+        if category_id:
+            products = AMDProduct.objects.filter(category_id=category_id)
+    
     context = {
         'categories': categories,
         'products': products,
+        'pc_type': pc_type,  # Helps track if it's Intel or AMD
     }
-    return render(request, 'store/intel_build.html', context)
-
-
-def amd_pc_build(request):
-    category_id = request.GET.get('category_id')
-    categories = Category.objects.all()  # Fetch all categories
-
-    # Fetch products for AMD category
-    if category_id:
-        products = AMDProduct.objects.filter(category_id=category_id)
-    else:
-        products = []  # Show products only when a category is selected
-
-    context = {
-        'categories': categories,
-        'products': products,
-    }
-    return render(request, 'store/amd_build.html', context)
-
-def add_to_cart(request, product_id):
-    # Ensure the user is authenticated
-    if not request.user.is_authenticated:
-        return JsonResponse({'success': False, 'message': 'User not authenticated'}, status=403)
-
-    # Fetch the product
-    product = get_object_or_404(Product, id=product_id)
-
-    # Get or create the cart associated with the user
-    cart, created = Cart.objects.get_or_create(user=request.user)
-
-    # Check if the item is already in the cart
-    cart_item, item_created = CartItem.objects.get_or_create(
-        cart=cart,
-        product=product,
-        defaults={'quantity': 1}
-    )
-    if not item_created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return JsonResponse({'success': True, 'message': 'Item added to cart!'})
+    return render(request, 'store/custom_pc_build.html', context)
