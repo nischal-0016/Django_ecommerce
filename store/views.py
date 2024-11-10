@@ -131,7 +131,6 @@ def add_to_cart(request, product_id):
 
     return JsonResponse({'success': True, 'message': 'Product added to cart'})
 
-# Add Intel product to cart
 @login_required
 def add_intel_product_to_cart(request, product_id):
     product = get_object_or_404(IntelProduct, id=product_id)
@@ -142,7 +141,8 @@ def add_intel_product_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
 
-    return JsonResponse({'success': True, 'message': 'Intel product added to cart'})
+    # Redirect to the cart page after adding the item
+    return redirect('cart')
 
 # Add AMD product to cart
 @login_required
@@ -154,6 +154,9 @@ def add_amd_product_to_cart(request, product_id):
     if not created:
         cart_item.quantity += 1
         cart_item.save()
+
+    # Redirect to the cart page after adding the item
+    return redirect('cart')
 
     return JsonResponse({'success': True, 'message': 'AMD product added to cart'})
 # Remove item from cart

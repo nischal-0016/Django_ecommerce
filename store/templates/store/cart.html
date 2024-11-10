@@ -179,13 +179,23 @@
             <ul>
                 {% for item in cart_items %}
                     <li class="cart-item" id="cart-item-{{ item.id }}">
-                        <strong>{{ item.product.name }}</strong> - 
-                        Price: {{ item.product.price }} Rs. - 
+                        {% if item.product %}
+                            <strong>{{ item.product.name }}</strong> - 
+                            Price: {{ item.product.price }} Rs. - 
+                        {% elif item.intel_product %}
+                            <strong>{{ item.intel_product.name }}</strong> - 
+                            Price: {{ item.intel_product.price }} Rs. - 
+                        {% elif item.amd_product %}
+                            <strong>{{ item.amd_product.name }}</strong> - 
+                            Price: {{ item.amd_product.price }} Rs. - 
+                        {% endif %}
+                        
                         Quantity:
                         <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
                         <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">Update</button>
                         <button class="delete-button" onclick="deleteItem({{ item.id }})">Delete</button>
-                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} Rs</span>
+                        
+                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} Rs.</span>
                     </li>
                 {% endfor %}
             </ul>
