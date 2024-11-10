@@ -95,7 +95,7 @@
         .cart-popup.show {
             visibility: visible;  /* Show the popup */
             opacity: 1;  /* Fully opaque */
-            transition: opacity 0.5s linear;  /* Transition for opacity */
+            transition: opacity 0.5s linear; 
         }
 
         @media (max-width: 768px) {
@@ -122,7 +122,6 @@
             const formData = new FormData();
             formData.append('quantity', quantity);
 
-            // Send the request to add the product to the cart
             fetch(`/product/${productId}/add-to-cart/`, {
                 method: 'POST',
                 headers: {

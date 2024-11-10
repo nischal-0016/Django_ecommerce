@@ -153,7 +153,6 @@
 
             <!-- Profile Button -->
             {% if user.is_authenticated %}
-                <!-- Show the user's name and link to their profile -->
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
                 </a>
@@ -179,7 +178,6 @@
         <div class="product-grid">
             {% for product in products %}
             <div class="product-card">
-                <!-- Display the product image if it exists -->
                 {% if product.image %}
                     <img src="{{ product.image.url }}" alt="{{ product.name }}">
                 {% else %}

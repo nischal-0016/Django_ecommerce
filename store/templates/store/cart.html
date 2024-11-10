@@ -115,10 +115,10 @@
     }
 
     function deleteItem(itemId) {
-        fetch(`/cart/remove/${itemId}/`, {  // Correct URL
+        fetch(`/cart/remove/${itemId}/`, {  
             method: 'POST',
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}'  // Ensure the CSRF token is sent
+                'X-CSRFToken': '{{ csrf_token }}'  
             },
         })
         .then(response => {
@@ -128,9 +128,7 @@
             throw new Error('Network response was not ok.');
         })
         .then(data => {
-            // Remove the item from the page
             document.getElementById('cart-item-' + itemId).remove();
-            // Update the total price of the cart
             document.getElementById('total-price').textContent = data.total_cart_price + ' USD';
         })
         .catch(error => console.error('Error deleting item:', error));
@@ -153,12 +151,11 @@
             {% endif %}
             <!-- Profile Button -->
             {% if user.is_authenticated %}
-                <!-- Show the user's name and link to their profile -->
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
                 </a>
             {% else %}
-                <!-- Show a generic Profile button for unauthenticated users -->
+                <!-- Show Profile button for unauthenticated users -->
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
             

@@ -141,6 +141,30 @@
         .product-btn:hover {
             background-color: #5c2b1b;
         }
+        .popup {
+            position: fixed;
+            top: 15%;
+            right: 15%;
+            background-color: #4caf50; /* Green background for success */
+            color: white;
+            padding: 15px 25px;
+            border: 2px solid #388e3c; /* Darker green border for better contrast */
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow for depth */
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: opacity 0.4s ease, transform 0.4s ease; /* Smooth transition */
+            z-index: 1000;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        
 
         /* Footer Styling */
         footer {
@@ -152,6 +176,52 @@
         }
     </style>
 </head>
+<script>
+    function showPopup(message) {
+        console.log("Popup message:", message);
+    
+        const popup = document.createElement('div');
+        popup.classList.add('popup');
+        popup.textContent = message;
+        document.body.appendChild(popup);
+    
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 10);
+    
+        setTimeout(() => {
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }, 2000);
+    }
+    
+    function addToCart(productId, isIntel = false, isAMD = false) {
+        const url = isIntel ? `/product/intel/${productId}/add-to-cart/` :
+                    isAMD ? `/product/amd/${productId}/add-to-cart/` :
+                    `/product/${productId}/add-to-cart/`;
+    
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',  
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showPopup(data.message);  
+            } else {
+                showPopup('Failed to add item to cart');  
+            }
+        })
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            showPopup('Error adding to cart');
+        });
+    }
+     
+</script>
 <body>
     <header>
         <h1 class="title">PCGeek - AMD Ryzen PC Build</h1>
@@ -195,17 +265,15 @@
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         <span>{{ product.name }} Rs {{ product.price }}</span>
         
-                        <!-- Form to add the product to the cart with quantity -->
-                        <form action="{% url 'add_amd_product_to_cart' product.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="product-btn">Add to Cart</button>
-                        </form>
+                        <!-- add to cart button with JavaScript function to handle adding to cart -->
+                        <button type="button" onclick="addToCart('{{ product.id }}', false, true)">Add to Cart</button>
                     </div>
                 {% endfor %}
             {% else %}
                 <p>Please select a category to view products.</p>
             {% endif %}
         </div>
+        
     </div>
 
     <footer>

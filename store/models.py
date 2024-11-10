@@ -62,7 +62,7 @@ class AMDProduct(models.Model):
     def __str__(self):
         return f"{self.name} - ${self.price:.2f}"
     
-# Cart model for users
+
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
 

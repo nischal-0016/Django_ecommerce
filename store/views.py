@@ -140,8 +140,6 @@ def add_intel_product_to_cart(request, product_id):
     if not created:
         cart_item.quantity += 1
         cart_item.save()
-
-    # Redirect to the cart page after adding the item
     return redirect('cart')
 
 # Add AMD product to cart
@@ -154,11 +152,11 @@ def add_amd_product_to_cart(request, product_id):
     if not created:
         cart_item.quantity += 1
         cart_item.save()
-
-    # Redirect to the cart page after adding the item
     return redirect('cart')
 
     return JsonResponse({'success': True, 'message': 'AMD product added to cart'})
+
+
 # Remove item from cart
 @login_required
 def remove_from_cart(request, item_id):
@@ -211,6 +209,6 @@ def custom_pc_build(request):
     context = {
         'categories': categories,
         'products': products,
-        'pc_type': pc_type,  # Helps track if it's Intel or AMD
+        'pc_type': pc_type,
     }
     return render(request, 'store/custom_pc_build.html', context)

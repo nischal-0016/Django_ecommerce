@@ -86,7 +86,7 @@
         
         .form-actions {
             display: flex;
-            justify-content: flex-end;  /* Move the button to the right */
+            justify-content: flex-end; 
             margin-top: 20px;
         }
 
@@ -177,7 +177,7 @@
                     {{ user.username }}
                 </a>
             {% else %}
-                <!-- Show a generic Profile button for unauthenticated users -->
+                <!-- Show Profile button for unauthenticated users -->
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
             {% if user.is_authenticated %}
@@ -254,13 +254,13 @@
 
            
             setTimeout(() => {
-                form.submit();  // Submit the form after 3 seconds
-            }, 3000);  // Display the pop-up for 3 seconds
+                form.submit();  // submit the form after 2 seconds
+            }, 2000);  
 
-            // Hide the pop-up after 3.5 seconds
+            // Hide the pop-up after 2 seconds
             setTimeout(() => {
                 popup.classList.remove('show');
-            }, 2500); 
+            }, 2000); 
         }
     </script>
 </body>
