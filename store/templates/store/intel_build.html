@@ -6,49 +6,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intel PC Build</title>
     <style>
+        /* General Page Styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
+            color: #461616;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
         }
-
+        
         header {
-            background-color: #451b1b;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
             color: white;
             padding: 20px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-
-        .title {
-            color: #ffffff;
-        }
-
+        
         /* Navbar Styling */
         nav {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 15px;
-            background-color: #451b1b;
-            padding: 10px 0;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        nav a, .logout-button {
-            background: #451b1b;
+        
+        nav a,
+        .logout-button {
+            position: relative;
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            border-radius: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
         }
-
-        nav a:hover, .logout-button:hover {
-            background: #80341f;
+        
+        nav a::before,
+        .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
         }
-
+        
+        nav a:hover::before,
+        .logout-button:hover::before {
+            left: 100%;
+        }
+        
+        nav a:hover,
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1,
+        .title {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 2.5em;
+            position: relative;
+            padding-bottom: 15px;
+            color: #451b1b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1::after,
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #451b1b, #80341f);
+            border-radius: 2px;
+        }
+        
         /* Main Container Styling */
         .container {
             display: flex;
@@ -57,29 +113,24 @@
             margin: 30px auto;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
-            color: #451b1b;
-        }
-
-        /* Sidebar Styling */
+        
         .sidebar {
             flex: 1 1 250px;
             padding: 20px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            background: rgba(248, 248, 248, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-right: 20px;
         }
-
+        
         .sidebar ul {
             list-style-type: none;
             padding: 0;
         }
-
+        
         .sidebar li {
             margin-bottom: 10px;
             padding: 10px;
@@ -87,73 +138,78 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-
+        
         .sidebar li.selected {
             background: #80341f;
             color: #fff;
         }
-
-        .sidebar li a {
-            text-decoration: none;
-            color: inherit;
-            font-weight: bold;
+        
+        .sidebar li:hover {
+            background: rgba(69, 27, 27, 0.1);
+            color: #80341f;
         }
-
-        /* Product List Styling */
+        
         .product-list {
             flex: 3;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
         }
-
+        
         .product-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s, transform 0.3s;
         }
-
+        
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
         .product-item img {
             max-width: 100%;
             height: auto;
             margin-bottom: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
             border: 1px solid #ddd;
         }
-
+        
         .product-btn {
             background-color: #80341f;
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s;
             font-weight: bold;
-            margin-top: 10px;
+            transition: background 0.3s, transform 0.2s;
         }
-
+        
         .product-btn:hover {
             background-color: #5c2b1b;
+            transform: scale(1.05);
         }
+        
         .popup {
             position: fixed;
             top: 10%;
             right: 10%;
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
             color: white;
             padding: 15px 20px;
-            border-radius: 5px;
+            border-radius: 10px;
             opacity: 0;
             transform: translateY(-10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .popup.show {
@@ -161,16 +217,43 @@
             transform: translateY(0);
         }
         
-
-        /* Footer Styling */
         footer {
             text-align: center;
             padding: 15px 0;
-            background-color: #4d1919;
+            background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
             color: white;
             font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
-    </style>
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+        
+            nav a,
+            .logout-button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        
+            h1,
+            .title {
+                font-size: 2em;
+                margin-top: 30px;
+            }
+        
+            .container {
+                flex-direction: column;
+            }
+        
+            .sidebar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>    
 </head>
 <script>
     function showPopup(message) {

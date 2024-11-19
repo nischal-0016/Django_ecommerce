@@ -1,145 +1,249 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Your Cart - PCGeek</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            padding: 0px;
-            margin: 0px;
-        }
-    
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #461616;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
             line-height: 1.6;
         }
 
         header {
-            background: #451b1b;
-            color: #ffffff;
-            padding: 20px 0;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo-container {
             text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .logo-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #ffffff, rgba(255,255,255,0.5));
+            border-radius: 2px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
         }
 
         nav a, .logout-button {
-            background: #451b1b;
+            position: relative;
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            border-radius: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a::before, .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        nav a:hover::before, .logout-button:hover::before {
+            left: 100%;
         }
 
         nav a:hover, .logout-button:hover {
-            background: #80341f;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         main {
+            max-width: 1200px;
+            margin: 30px auto;
             padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #451b1b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #451b1b, #80341f);
+            border-radius: 2px;
         }
 
         .cart-item {
-            background: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 5px;
-            margin: 10px 0;
-            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            margin: 15px 0;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
 
         .cart-item input[type="number"] {
-            width: 50px;
-            padding: 5px;
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item input[type="number"]:focus {
+            outline: none;
+            border-color: #80341f;
+            box-shadow: 0 0 10px rgba(128,52,31,0.1);
         }
 
         .update-button, .delete-button {
-            background-color: #451b1b;
+            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
             color: white;
+            padding: 10px 20px;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
             margin-left: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .update-button:hover, .delete-button:hover {
-            background-color: #80341f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
         }
 
         .total-price {
-            font-weight: bold;
-            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            text-align: right;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
         }
 
         footer {
             text-align: center;
-            padding: 10px 0;
-            background: #4d1919;
-            color: #ffffff;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            
+            nav a, .logout-button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            main {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            .logo-title {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
-<script>
-    function updateQuantity(productId, itemId) {
-        const quantity = document.getElementById('quantity-' + itemId).value;
-        const formData = new FormData();
-        formData.append('quantity', quantity);
-
-        fetch(`/cart/update/${productId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(data => {
-            document.getElementById('total-' + itemId).textContent = data.item_total_price + ' USD';
-            document.getElementById('total-price').textContent = data.total_cart_price + ' USD';
-        })
-        .catch(error => console.error('Error updating quantity:', error));
-    }
-
-    function deleteItem(itemId) {
-        fetch(`/cart/remove/${itemId}/`, {  
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'  
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(data => {
-            document.getElementById('cart-item-' + itemId).remove();
-            document.getElementById('total-price').textContent = data.total_cart_price + ' USD';
-        })
-        .catch(error => console.error('Error deleting item:', error));
-    }
-</script>
 <body>
     <header>
-        <h1>Your Shopping Cart</h1>
+        <div class="logo-container">
+            <h1 class="logo-title">PCGeek</h1>
+        </div>
         <nav>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
+            <a href="{% url 'home' %}">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{% url 'custom_pc_build' %}">
+                <i class="fas fa-desktop"></i> Custom PC Build
+            </a>
             {% if user.is_authenticated %}
                 <a href="{% url 'cart' %}" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i> Cart
@@ -149,23 +253,23 @@
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
             {% endif %}
-            <!-- Profile Button -->
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">
-                    {{ user.username }}
+                    <i class="fas fa-user"></i> {{ user.username }}
                 </a>
-            {% else %}
-                <!-- Show Profile button for unauthenticated users -->
-                <a href="{% url 'login' %}" class="profile-button">Profile</a>
-            {% endif %}
-            
-            {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="logout-button">Logout</button>
+                    <button type="submit" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="login-button">Login</a>
+                <a href="{% url 'login' %}" class="profile-button">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="{% url 'login' %}" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
             {% endif %}
         </nav>
     </header>
@@ -173,26 +277,36 @@
     <main>
         <h2>Items in Your Cart</h2>
         {% if cart_items %}
-            <ul>
+            <ul style="list-style: none; padding: 0;">
                 {% for item in cart_items %}
                     <li class="cart-item" id="cart-item-{{ item.id }}">
-                        {% if item.product %}
-                            <strong>{{ item.product.name }}</strong> - 
-                            Price: {{ item.product.price }} Rs. - 
-                        {% elif item.intel_product %}
-                            <strong>{{ item.intel_product.name }}</strong> - 
-                            Price: {{ item.intel_product.price }} Rs. - 
-                        {% elif item.amd_product %}
-                            <strong>{{ item.amd_product.name }}</strong> - 
-                            Price: {{ item.amd_product.price }} Rs. - 
-                        {% endif %}
+                        <div class="item-details">
+                            {% if item.product %}
+                                <strong>{{ item.product.name }}</strong>
+                                <div>Price: {{ item.product.price }} Rs.</div>
+                            {% elif item.intel_product %}
+                                <strong>{{ item.intel_product.name }}</strong>
+                                <div>Price: {{ item.intel_product.price }} Rs.</div>
+                            {% elif item.amd_product %}
+                                <strong>{{ item.amd_product.name }}</strong>
+                                <div>Price: {{ item.amd_product.price }} Rs.</div>
+                            {% endif %}
+                        </div>
                         
-                        Quantity:
-                        <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
-                        <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">Update</button>
-                        <button class="delete-button" onclick="deleteItem({{ item.id }})">Delete</button>
+                        <div class="quantity-controls">
+                            <span>Quantity:</span>
+                            <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
+                            <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">
+                                <i class="fas fa-sync-alt"></i> Update
+                            </button>
+                            <button class="delete-button" onclick="deleteItem({{ item.id }})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
                         
-                        Total: <span id="total-{{ item.id }}">{{ item.total_price }} Rs.</span>
+                        <div class="item-total">
+                            Total: <strong><span id="total-{{ item.id }}">{{ item.total_price }} Rs.</span></strong>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -203,7 +317,6 @@
             <p>Your cart is empty.</p>
         {% endif %}
     </main>
-
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
     </footer>

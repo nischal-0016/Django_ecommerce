@@ -1,76 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
-    <title>AMD Ryzen PC Build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCGeek - Store</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
             color: #333;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #451b1b;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
             color: white;
             padding: 20px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .title {
             color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Navbar Styling */
+        /* Enhanced Navbar */
         nav {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 15px;
-            background-color: #451b1b;
-            padding: 10px 0;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         nav a, .logout-button {
-            background: #451b1b;
+            position: relative;
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            border-radius: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        nav a::before, .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        nav a:hover::before, .logout-button:hover::before {
+            left: 100%;
         }
 
         nav a:hover, .logout-button:hover {
-            background: #80341f;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Main Container Styling */
+        /* Enhanced Container */
         .container {
             display: flex;
             flex-wrap: wrap;
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         h1 {
             color: #451b1b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 10px;
         }
 
-        /* Sidebar Styling */
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #451b1b, #80341f);
+            border-radius: 2px;
+        }
+
+        /* Enhanced Sidebar */
         .sidebar {
             flex: 1 1 250px;
-            padding: 20px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-right: 20px;
         }
 
@@ -80,30 +121,41 @@
         }
 
         .sidebar li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .sidebar li.selected {
-            background: #80341f;
+            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
             color: #fff;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(128,52,31,0.2);
+        }
+
+        .sidebar li:hover:not(.selected) {
+            background: #f0f0f0;
+            transform: translateX(5px);
         }
 
         .sidebar li a {
             text-decoration: none;
             color: inherit;
             font-weight: bold;
+            display: block;
         }
 
-        /* Product List Styling */
+        /* Enhanced Product List */
         .product-list {
             flex: 3;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px;
         }
 
         .product-item {
@@ -111,68 +163,113 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
 
         .product-item img {
             max-width: 100%;
             height: auto;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-item:hover img {
+            transform: scale(1.05);
         }
 
         .product-btn {
-            background-color: #80341f;
+            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .product-btn:hover {
-            background-color: #5c2b1b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
         }
+
+        /* Enhanced Popup */
         .popup {
             position: fixed;
             top: 15%;
             right: 15%;
-            background-color: #4caf50; /* Green background for success */
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
             color: white;
             padding: 15px 25px;
-            border: 2px solid #388e3c; /* Darker green border for better contrast */
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow for depth */
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             opacity: 0;
             transform: translateY(-15px);
-            transition: opacity 0.4s ease, transform 0.4s ease; /* Smooth transition */
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
             font-weight: bold;
             font-size: 1rem;
         }
-        
+
         .popup.show {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        
 
-        /* Footer Styling */
+        /* Enhanced Footer */
         footer {
             text-align: center;
-            padding: 15px 0;
-            background-color: #4d1919;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
             color: white;
             font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            .sidebar {
+                flex: 1 1 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .product-list {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+
+            nav a, .logout-button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
