@@ -232,6 +232,40 @@
         }
     </style>
 </head>
+<script>
+    function deleteItem(itemId) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        fetch(`/cart/remove/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ item_id: itemId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_cart_price) {
+                // Update the cart total price
+                document.getElementById('total-price').innerText = data.total_cart_price + ' Rs.';
+    
+                // Remove the item from the cart UI
+                const cartItemElement = document.getElementById('cart-item-' + itemId);
+                if (cartItemElement) {
+                    cartItemElement.remove();
+                }
+            } else {
+                alert('Failed to remove item.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while removing the item.');
+        });
+    }
+    
+</script>
 <body>
     <header>
         <div class="logo-container">
@@ -294,15 +328,12 @@
                         </div>
                         
                         <div class="quantity-controls">
-                            <span>Quantity:</span>
-                            <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1">
-                            <button class="update-button" onclick="updateQuantity({{ item.product.id }}, {{ item.id }})">
-                                <i class="fas fa-sync-alt"></i> Update
-                            </button>
+                            <span>Quantity: {{ item.quantity }}</span>
                             <button class="delete-button" onclick="deleteItem({{ item.id }})">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
+                        
                         
                         <div class="item-total">
                             Total: <strong><span id="total-{{ item.id }}">{{ item.total_price }} Rs.</span></strong>

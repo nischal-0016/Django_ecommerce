@@ -6,7 +6,7 @@ from .models import Product, Category, Cart, CartItem, IntelProduct, AMDProduct,
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.contrib.contenttypes.models import ContentType
+
 
 # View to list all products
 def product_list(request):
@@ -163,32 +163,36 @@ def remove_from_cart(request, item_id):
     if request.method == 'POST':
         cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
         cart_item.delete()
+
+        # Calculate the total cart price after item removal
         total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
         return JsonResponse({'total_cart_price': total_cart_price})
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-# Update cart quantity
-@login_required
-def update_cart_quantity(request, product_id):
-    if request.method == 'POST':
-        product = get_object_or_404(Product, id=product_id)
-        cart_item = get_object_or_404(CartItem, product=product, cart__user=request.user)
-        quantity = int(request.POST.get('quantity', 1))
+    
+# # Update cart quantity
+# @login_required
+# def update_cart_quantity(request, product_id):
+#     if request.method == 'POST':
+#         product = get_object_or_404(Product, id=product_id)
+#         cart_item = get_object_or_404(CartItem, product=product, cart__user=request.user)
+#         quantity = int(request.POST.get('quantity', 1))
 
-        if quantity < 1:
-            return JsonResponse({'error': 'Quantity must be at least 1.'}, status=400)
+#         if quantity < 1:
+#             return JsonResponse({'error': 'Quantity must be at least 1.'}, status=400)
 
-        cart_item.quantity = quantity
-        cart_item.save()
-        item_total_price = cart_item.total_price()
-        total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
+#         cart_item.quantity = quantity
+#         cart_item.save()
+#         item_total_price = cart_item.total_price()
+#         total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
-        return JsonResponse({
-            'item_total_price': item_total_price,
-            'total_cart_price': total_cart_price
-        })
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+#         return JsonResponse({
+#             'item_total_price': item_total_price,
+#             'total_cart_price': total_cart_price
+#         })
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 def custom_pc_build(request):
     category_id = request.GET.get('category_id')

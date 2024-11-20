@@ -23,7 +23,7 @@ urlpatterns = [
     # Cart management URLs
     path('cart/', views.cart_view, name='cart'),  # Cart page
 
-    path('cart/update/<str:product_id>/', views.update_cart_quantity, name='update_cart_quantity'),  # Update quantity in the cart
+    # path('cart/update/<str:product_id>/', views.update_cart_quantity, name='update_cart_quantity'),  # Update quantity in the cart
     path('cart/remove/<str:item_id>/', views.remove_from_cart, name='remove_from_cart'),  # Remove item from cart
 
     # User Authentication URLs
