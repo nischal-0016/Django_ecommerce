@@ -199,17 +199,18 @@
         
         .popup {
             position: fixed;
-            top: 10%;
-            right: 10%;
-            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
             color: white;
             padding: 15px 20px;
             border-radius: 10px;
+            font-size: 1rem;
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .popup.show {
@@ -280,20 +281,31 @@
         fetch(url, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json'
+                'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId }) // Optional if you want to send additional data
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to add item to cart');
             }
         })
-        .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showPopup(data.message);
+                showPopup('Item added to cart!');
             } else {
                 showPopup('Failed to add item to cart');
             }
         })
-        .catch(error => console.error('Error adding to cart:', error));
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            showPopup('Item added to cart');
+        });
     }
+    
     
 </script>
 <body>

@@ -241,22 +241,26 @@
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
-            },
-            body: JSON.stringify({ item_id: itemId })
+            }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to remove item.');
+            }
+            return response.json();
+        })
         .then(data => {
-            if (data.total_cart_price) {
-                // Update the cart total price
+            if (data.success) {
+                // Update the total cart price
                 document.getElementById('total-price').innerText = data.total_cart_price + ' Rs.';
     
-                // Remove the item from the cart UI
+                // Remove the deleted item from the DOM
                 const cartItemElement = document.getElementById('cart-item-' + itemId);
                 if (cartItemElement) {
                     cartItemElement.remove();
                 }
             } else {
-                alert('Failed to remove item.');
+                alert('Failed to remove item: ' + (data.error || 'Unknown error.'));
             }
         })
         .catch(error => {
@@ -264,6 +268,7 @@
             alert('An error occurred while removing the item.');
         });
     }
+    
     
 </script>
 <body>

@@ -161,15 +161,21 @@ def add_amd_product_to_cart(request, product_id):
 @login_required
 def remove_from_cart(request, item_id):
     if request.method == 'POST':
-        cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-        cart_item.delete()
+        try:
+            # Fetch and delete the cart item
+            cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+            cart_item.delete()
 
-        # Calculate the total cart price after item removal
-        total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
+            # Calculate the total cart price after item removal
+            total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
-        return JsonResponse({'total_cart_price': total_cart_price})
+            return JsonResponse({'success': True, 'total_cart_price': total_cart_price})
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
 
     
 # # Update cart quantity
