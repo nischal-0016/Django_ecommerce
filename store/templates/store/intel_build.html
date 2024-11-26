@@ -117,36 +117,48 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
+        /* Enhanced Sidebar */
         .sidebar {
             flex: 1 1 250px;
-            padding: 20px;
-            background: rgba(248, 248, 248, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-right: 20px;
         }
-        
+
         .sidebar ul {
             list-style-type: none;
             padding: 0;
         }
-        
+
         .sidebar li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        
+
         .sidebar li.selected {
-            background: #80341f;
+            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
             color: #fff;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(128,52,31,0.2);
         }
-        
-        .sidebar li:hover {
-            background: rgba(69, 27, 27, 0.1);
-            color: #80341f;
+
+        .sidebar li:hover:not(.selected) {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .sidebar li a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: bold;
+            display: block;
         }
         
         .product-list {

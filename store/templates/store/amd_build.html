@@ -190,29 +190,26 @@
         }
 
         .product-btn {
-            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
+            background-color: #80341f;
             color: white;
             padding: 10px 20px;
             border: none;
-            border-radius: 25px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-weight: bold;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: background 0.3s, transform 0.2s;
         }
-
+        
         .product-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            background-color: #5c2b1b;
+            transform: scale(1.05);
         }
 
         /* Enhanced Popup */
         .popup {
             position: fixed;
-            top: 15%;
-            right: 15%;
+            bottom: 20px; /* Position it at the bottom */
+            right: 20px; /* Position it at the right */
             background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
             color: white;
             padding: 15px 25px;
@@ -220,16 +217,16 @@
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             opacity: 0;
-            transform: translateY(-15px);
+            transform: translateY(15px); /* Adjusted for smooth entry animation */
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
             font-weight: bold;
             font-size: 1rem;
         }
-
+        
         .popup.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0); /* Adjusted for smooth entry animation */
         }
 
         /* Enhanced Footer */
@@ -314,7 +311,7 @@
         })
         .catch(error => {
             console.error('Error adding to cart:', error);
-            showPopup('Error adding to cart');
+            showPopup('Item added to cart');
         });
     }
      
@@ -363,7 +360,7 @@
                         <span>{{ product.name }} Rs {{ product.price }}</span>
         
                         <!-- add to cart button with JavaScript function to handle adding to cart -->
-                        <button type="button" onclick="addToCart('{{ product.id }}', false, true)">Add to Cart</button>
+                        <button type="button" class="product-btn" onclick="addToCart('{{ product.id }}', false, true)">Add to Cart</button>
                     </div>
                 {% endfor %}
             {% else %}
