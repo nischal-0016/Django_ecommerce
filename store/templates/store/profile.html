@@ -5,121 +5,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ request.user.username }}'s Profile - PCGeek</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
+            color: #461616;
+            line-height: 1.6;
         }
 
         header {
-            background-color: #451b1b;
-            color: white;
-            padding: 20px;
             text-align: center;
-        }
-
-        .title {
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
             color: #ffffff;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-
-        /* Navbar Styling */
+        
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            padding: 5px 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        header h1:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Navigation Bar Styling */
         nav {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            background-color: #451b1b;
+            align-items: center;
             padding: 10px 0;
+            gap: 15px;
         }
-
-        nav a, .logout-button {
-            background: #451b1b;
+        
+        nav a,
+        .logout-button {
+            position: relative;
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 15px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        nav a::before,
+        .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        nav a:hover::before,
+        .logout-button:hover::before {
+            left: 100%;
+        }
+        
+        nav a:hover,
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Cart Icon Styling */
+        .cart-icon {
+            position: relative;
+            font-size: 1rem;
+            padding: 10px 20px !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cart-icon .cart-count {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            line-height: 1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cart-icon i {
+            font-size: 1rem;
         }
 
-        nav a:hover, .logout-button:hover {
-            background: #80341f;
-        }
-        
+        /* Main Content Styling */
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
         }
-        
-        /* Profile Page Styling */
-        h2 {
+
+        .container h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #451b1b;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
-            font-weight: bold;
-            color: #333;
             margin-bottom: 5px;
+            font-weight: bold;
+            color: #461616;
         }
-        
-        .form-group input,
+
+        .form-group input, 
         .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 14px;
         }
-        
+
         .form-actions {
-            display: flex;
-            justify-content: flex-end; 
+            text-align: center;
             margin-top: 20px;
         }
 
-        button.btn-primary {
-            background-color: #451b1b;
-            color: #ffffff;
-            padding: 10px 20px;
+        .btn-primary {
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            color: white;
             border: none;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        button.btn-primary:hover {
-            background-color: #80341f;
-        }
-        nav a, .logout-button {
-            background: #451b1b;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 15px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            transition: background 0.3s;
+            transition: transform 0.3s ease;
         }
 
-        nav a:hover, .logout-button:hover {
-            background: #80341f;
+        .btn-primary:hover {
+            transform: scale(1.05);
         }
 
-        /* Pop-up Styling */
         .popup {
             visibility: hidden;
             opacity: 0;
@@ -141,16 +197,14 @@
             transition: opacity 0.3s linear;
         }
 
-        /* Footer Styling */
         footer {
             text-align: center;
-            padding: 15px 0;
-            background: #4d1919;
-            color: #ffffff;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
             position: relative;
-            bottom: 0;
-            width: 100%;
-            margin-top: 40px;
         }
     </style>
 </head>
@@ -172,16 +226,13 @@
                 </a>
             {% endif %}
             {% if user.is_authenticated %}
-                <!-- Show the user's name and link to their profile -->
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
                 </a>
             {% else %}
-                <!-- Show Profile button for unauthenticated users -->
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
             {% if user.is_authenticated %}
-                <!-- Logout form -->
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
@@ -192,53 +243,51 @@
         </nav>
     </header>
 
-    <main>
-        <div class="container">
-            <h2>{{ request.user.username }}'s Profile</h2>
-            
-            <form method="POST" onsubmit="showPopup(event)">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="{{ request.user.username }}">
-                </div>
-                
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    {{ user_form.first_name }}
-                </div>
-                
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    {{ user_form.last_name }}
-                </div>
-            
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    {{ user_form.email }}
-                </div>
-            
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    {{ profile_form.address }}
-                </div>
-            
-                <div class="form-group">
-                    <label for="contact_number">Contact Number</label>
-                    {{ profile_form.contact_number }}
-                </div>
-            
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </div>
-            </form>
-        </div>
+    <div class="container">
+        <h2>{{ request.user.username }}'s Profile</h2>
         
-        <!-- Pop-up Message -->
-        <div class="popup" id="profile-popup">
-            Profile Updated!
-        </div>
-    </main>
+        <form method="POST" onsubmit="showPopup(event)">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{ request.user.username }}" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user_form.first_name.value|default:'' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="{{ user_form.last_name.value|default:'' }}">
+            </div>
+        
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ user_form.email.value|default:'' }}">
+            </div>
+        
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" value="{{ profile_form.address.value|default:'' }}">
+            </div>
+        
+            <div class="form-group">
+                <label for="contact_number">Contact Number</label>
+                <input type="tel" id="contact_number" name="contact_number" value="{{ profile_form.contact_number.value|default:'' }}">
+            </div>
+        
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Update Profile</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Pop-up Message -->
+    <div class="popup" id="profile-popup">
+        Profile Updated!
+    </div>
 
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
@@ -252,7 +301,6 @@
 
             popup.classList.add('show');
 
-           
             setTimeout(() => {
                 form.submit();  // submits the form after 2 seconds
             }, 2000);  
