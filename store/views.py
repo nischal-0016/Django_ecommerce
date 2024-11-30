@@ -118,18 +118,22 @@ def cart_view(request):
         'cart_count': cart.total_items(),
     })
 
-# Add product to cart (general)
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart, _ = Cart.objects.get_or_create(user=request.user)
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-    if not created:
-        cart_item.quantity += 1
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        if created:
+            cart_item.quantity = quantity
+        else:
+            cart_item.quantity += quantity
         cart_item.save()
+        return JsonResponse({'success': True, 'message': 'Product added to cart'})
 
-    return JsonResponse({'success': True, 'message': 'Product added to cart'})
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
 
 @login_required
 def add_intel_product_to_cart(request, product_id):
@@ -153,8 +157,6 @@ def add_amd_product_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
     return redirect('cart')
-
-    return JsonResponse({'success': True, 'message': 'AMD product added to cart'})
 
 
 # Remove item from cart
