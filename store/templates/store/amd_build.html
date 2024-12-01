@@ -374,8 +374,6 @@
                     <div class="product-item">
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         <span>{{ product.name }} Rs {{ product.price }}</span>
-        
-                        <!-- add to cart button with JavaScript function to handle adding to cart -->
                         <button type="button" class="product-btn" onclick="addToCart('{{ product.id }}', false, true)">Add to Cart</button>
                     </div>
                 {% endfor %}

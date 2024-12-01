@@ -293,10 +293,10 @@
         fetch(url, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+                'X-CSRFToken': '{{ csrf_token }}', 
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ productId }) // Optional if you want to send additional data
+            body: JSON.stringify({ productId })
         })
         .then(response => {
             if (response.ok) {
@@ -363,7 +363,6 @@
                     <img src="{{ product.image.url }}" alt="{{ product.name }}">
                     <span>{{ product.name }} - Rs {{ product.price }}</span>
                 
-                    <!-- Add to Cart button with JavaScript function to handle adding to cart -->
                     <button type="button" class="product-btn" onclick="addToCart('{{ product.id }}', true)">Add to Cart</button>
                 </div>
                 {% endfor %}

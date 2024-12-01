@@ -251,10 +251,7 @@
         })
         .then(data => {
             if (data.success) {
-                // Update the total cart price
                 document.getElementById('total-price').innerText = data.total_cart_price + ' Rs.';
-    
-                // Remove the deleted item from the DOM
                 const cartItemElement = document.getElementById('cart-item-' + itemId);
                 if (cartItemElement) {
                     cartItemElement.remove();

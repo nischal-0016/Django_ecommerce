@@ -238,12 +238,10 @@
             {% endif %}
             
             {% if user.is_authenticated %}
-                <!-- Show the user's name and link to their profile -->
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
                 </a>
             {% else %}
-                <!-- Show Profile button for unauthenticated users -->
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
             {% endif %}
 

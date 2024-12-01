@@ -3,15 +3,15 @@ from .models import Category, Product, Profile, IntelCategory, IntelProduct, AMD
 
 # Admin class for IntelProduct
 class IntelProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'category', 'image')  # Display fields in the list view
-    search_fields = ('name',)  # Allow searching by name
-    list_filter = ('category',)  # Add filtering by category
+    list_display = ('name', 'price', 'category', 'image')  
+    search_fields = ('name',)  
+    list_filter = ('category',) 
 
 # Admin class for AMDProduct
 class AMDProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'category', 'image')  # Display fields in the list view
-    search_fields = ('name',)  # Allow searching by name
-    list_filter = ('category',)  # Add filtering by category
+    list_display = ('name', 'price', 'category', 'image') 
+    search_fields = ('name',)  
+    list_filter = ('category',)  
 
 # Admin class for Category
 class CategoryAdmin(admin.ModelAdmin):
