@@ -38,6 +38,8 @@ urlpatterns = [
     path('custom-pc-build/', views.custom_pc_build, name='custom_pc_build'),  # Custom PC build main page
     path('custom-pc-build/intel/', views.intel_build, name='intel_build'),  # Intel-based custom PC build
     path('custom-pc-build/amd/', views.amd_pc_build, name='amd_build'),  # AMD-based custom PC build
+
+    path('order/', views.order_page, name='order'),
 ]
 
 if settings.DEBUG:

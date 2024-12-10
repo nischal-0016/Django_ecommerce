@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart, CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory
+from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 
 
 # View to list all products
@@ -224,3 +224,12 @@ def custom_pc_build(request):
         'pc_type': pc_type,
     }
     return render(request, 'store/custom_pc_build.html', context)
+
+
+@login_required
+def order_page(request):
+    cart = get_object_or_404(Cart, user=request.user)
+    items = cart.cart_items.all()
+    total_cost = sum(item.total_price() for item in items)
+
+    return render(request, 'store/order.html', {'cart': cart, 'items': items, 'total_cost': total_cost})

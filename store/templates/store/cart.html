@@ -192,6 +192,29 @@
             font-size: 1.2em;
             background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
         }
+        .order-button {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .order-button:hover {
+            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
 
         footer {
             text-align: center;
@@ -345,7 +368,10 @@
             </ul>
             <div class="total-price">
                 <strong>Total Price of Cart: <span id="total-price">{{ total_price }} Rs.</span></strong>
-            </div>
+                <a href="{% url 'order' %}" class="order-button">
+                    <i class="fas fa-credit-card"></i> Order
+                </a>
+            </div>            
         {% else %}
             <p>Your cart is empty.</p>
         {% endif %}
