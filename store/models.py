@@ -75,12 +75,9 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
-    
-    # Separate foreign keys for different product types
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
     intel_product = models.ForeignKey(IntelProduct, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
     amd_product = models.ForeignKey(AMDProduct, on_delete=models.CASCADE, related_name='cart_items', null=True, blank=True)
-
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
