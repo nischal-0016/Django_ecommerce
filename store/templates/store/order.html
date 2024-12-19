@@ -7,6 +7,7 @@
     <title>Order Details - PCGeek</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
+        /* General Styles */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
@@ -14,17 +15,71 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
+        /* Header */
         header {
             background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
             color: white;
             padding: 20px;
-            text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
         }
 
-        .container {
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a, .logout-button {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a::before, .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        nav a:hover::before, .logout-button:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover, .logout-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content */
+        main, .container {
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
@@ -52,6 +107,70 @@
             border-radius: 2px;
         }
 
+        /* Cart Item */
+        .cart-item {
+            background: white;
+            border-radius: 12px;
+            margin: 15px 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cart-item input[type="number"] {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item input[type="number"]:focus {
+            outline: none;
+            border-color: #80341f;
+            box-shadow: 0 0 10px rgba(128,52,31,0.1);
+        }
+
+        /* Buttons */
+        .update-button, .delete-button, .order-button {
+            background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin-left: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-button {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+        }
+
+        .update-button:hover, .delete-button:hover, .order-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .order-button:hover {
+            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+        }
+
+        /* Order Details */
         .order-details, .user-details {
             margin-bottom: 30px;
         }
@@ -71,6 +190,7 @@
             background: #f4f4f4;
         }
 
+        /* Footer */
         footer {
             text-align: center;
             padding: 20px 0;
@@ -81,12 +201,77 @@
             position: relative;
             margin-top: 50px;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            
+            nav a, .logout-button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            main {
+                margin: 15px;
+                padding: 15px;
+            }
+
+            .logo-title {
+                font-size: 2em;
+            }
+        }
+
+        
     </style>
 </head>
 <body>
     <header>
         <h1>PCGeek</h1>
     </header>
+    <nav>
+        <a href="{% url 'home' %}">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="{% url 'custom_pc_build' %}">
+            <i class="fas fa-desktop"></i> Custom PC Build
+        </a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'cart' %}" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="profile-button">
+                <i class="fas fa-user"></i> {{ user.username }}
+            </a>
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="profile-button">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="{% url 'login' %}" class="login-button">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        {% endif %}
+    </nav>
 
     <div class="container">
         <h2>Order Details</h2>

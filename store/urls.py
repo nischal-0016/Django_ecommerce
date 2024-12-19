@@ -7,7 +7,6 @@ from django.contrib.auth.views import LogoutView
 urlpatterns = [
     # Home and Product URLs
     path('', views.product_list, name='home'),  # Main page to list all products
-
     path('categories/', views.category_list, name='category_list'),  # Category listing page
 
     # Update URL pattern to accept string-based custom IDs for products
