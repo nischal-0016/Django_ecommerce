@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - PCGeek</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #451b1b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #451b1b, #80341f);
+            border-radius: 2px;
+        }
+
+        .order-details, .user-details {
+            margin-bottom: 30px;
+        }
+
+        .order-details table, .user-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-details th, .order-details td, .user-details th, .user-details td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .order-details th, .user-details th {
+            background: #f4f4f4;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PCGeek</h1>
+    </header>
+
+    <div class="container">
+        <h2>Order Details</h2>
+        <div class="order-details">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            {% if item.product %}
+                                {{ item.product.name }}
+                            {% elif item.intel_product %}
+                                {{ item.intel_product.name }}
+                            {% elif item.amd_product %}
+                                {{ item.amd_product.name }}
+                            {% endif %}
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>
+                            {% if item.product %}
+                                {{ item.product.price }} Rs.
+                            {% elif item.intel_product %}
+                                {{ item.intel_product.price }} Rs.
+                            {% elif item.amd_product %}
+                                {{ item.amd_product.price }} Rs.
+                            {% endif %}
+                        </td>
+                        <td>{{ item.total_price }} Rs.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>User Details</h2>
+        <div class="user-details">
+            <table>
+                <tr>
+                    <th>Username</th>
+                    <td>{{ request.user.username }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ request.user.email }}</td>
+                </tr>
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ request.user.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ request.user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ request.user.profile.address }}</td>
+                </tr>
+                <tr>
+                    <th>Contact Number</th>
+                    <td>{{ request.user.profile.contact_number }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="total-price">
+            <h2>Total Price: {{ total_cost }} Rs.</h2>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 PCGeek - All rights reserved</p>
+    </footer>
+</body>
+</html>
