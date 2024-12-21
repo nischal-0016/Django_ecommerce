@@ -190,6 +190,48 @@
             background: #f4f4f4;
         }
 
+        .total-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .total-price h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #451b1b;
+        }
+        
+        .proceed-to-pay-btn {
+            background: linear-gradient(135deg,rgb(123, 49, 49) 0%,rgb(114, 47, 47) 100%); /* Vibrant orange gradient */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-left: 20px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .proceed-to-pay-btn:hover {
+            background: linear-gradient(135deg,rgb(159, 47, 47) 0%,rgb(107, 29, 29) 100%); /* Reversed gradient for hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        
+
         /* Footer */
         footer {
             text-align: center;
@@ -346,7 +388,9 @@
 
         <div class="total-price">
             <h2>Total Price: {{ total_cost }} Rs.</h2>
+            <button class="proceed-to-pay-btn" onclick="location.href='/payment/'">Proceed to Pay</button>
         </div>
+        
     </div>
 
     <footer>
