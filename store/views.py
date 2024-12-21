@@ -233,3 +233,6 @@ def order_page(request):
     total_cost = sum(item.total_price() for item in items)
 
     return render(request, 'store/order.html', {'cart': cart, 'items': items, 'total_cost': total_cost})
+
+def payment_view(request):
+    return render(request, 'store/payment.html')

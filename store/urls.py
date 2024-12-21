@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .views import payment_view
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -39,6 +40,8 @@ urlpatterns = [
     path('custom-pc-build/amd/', views.amd_pc_build, name='amd_build'),  # AMD-based custom PC build
 
     path('order/', views.order_page, name='order'),
+
+    path('payment/', payment_view, name='payment'),
 ]
 
 if settings.DEBUG:
