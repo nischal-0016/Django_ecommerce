@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Profile, IntelCategory, IntelProduct, AMDCategory, AMDProduct
+from .models import Category, Product, Profile, IntelCategory, IntelProduct, AMDCategory, AMDProduct,Order
 
 # Admin class for IntelProduct
 class IntelProductAdmin(admin.ModelAdmin):
@@ -35,3 +35,4 @@ admin.site.register(IntelCategory, IntelCategoryAdmin)
 admin.site.register(IntelProduct, IntelProductAdmin)
 admin.site.register(AMDCategory, AMDCategoryAdmin)
 admin.site.register(AMDProduct, AMDProductAdmin)
+admin.site.register(Order)
