@@ -295,14 +295,14 @@
 
     <script>
         function showPopup(event) {
-            event.preventDefault();  // Prevent immediate form submission
+            event.preventDefault(); 
             const form = event.target;
             const popup = document.getElementById('profile-popup');
 
             popup.classList.add('show');
 
             setTimeout(() => {
-                form.submit();  // submits the form after 2 seconds
+                form.submit();
             }, 2000);  
 
             // Hide the pop-up after 2 seconds
