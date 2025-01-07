@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse
 
 
 # View to list all products
