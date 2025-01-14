@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order
+from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
