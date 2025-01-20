@@ -22,14 +22,14 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name} - ${self.price:.2f}"
 
-
+# Separate category model for INTEL products
 class IntelCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
 
-
+# AMD-specific product model linked to INETLCategory
 class IntelProduct(models.Model):
     id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
@@ -97,7 +97,7 @@ class CartItem(models.Model):
         elif self.amd_product:
             return self.quantity * self.amd_product.price
 
-# Profile model for user information
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255, blank=True, default='Not Provided')
