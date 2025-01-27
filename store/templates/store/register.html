@@ -6,95 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - PCGeek</title>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-        body {
-            margin: 0;
-            font-family: 'Ubuntu', sans-serif; /* Apply Ubuntu font */
-            background: url("{% static 'images/register.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            color: #ffffff;
-        }
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
 
-        header {
-            text-align: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        main {
-            max-width: 600px;
-            margin: 3rem auto;
-            padding: 3rem;
-            background-color: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
-        }
-
-        h1, h2 {
-            text-align: center;
-            font-weight: 500; /* Use Ubuntu font weights */
-        }
-
-        form div {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 400;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: 'Ubuntu', sans-serif; /* Apply Ubuntu font */
-        }
-
-        button {
-            width: 100%;
-            padding: 0.9rem;
-            border: none;
-            background-color: #e63946;
-            color: #ffffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-family: 'Ubuntu', sans-serif; /* Apply Ubuntu font */
-        }
-
-        button:hover {
-            background-color: #d62828;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.7);
-            margin-top: 2rem;
-            font-weight: 300;
-        }
-
-        a {
-            color: #e63946;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
-<body>
+<body style="background: url('{% static 'images/register.jpg' %}') no-repeat center center fixed; background-size: cover;">
+
     <header>
-        <h1>PCGeek - Register</h1>
+        <b><h1>PCGeek - Register</h1></b>
     </header>
 
     <main>
@@ -149,5 +67,29 @@
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
     </footer>
+
+    <script>
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+        const footer = document.querySelector('footer');
+
+        window.addEventListener('scroll', () => {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScroll > lastScrollTop) {
+                header.style.top = "-60px"; 
+            } else {
+                header.style.top = "0"; 
+            }
+            
+            if (currentScroll > lastScrollTop) {
+                footer.style.bottom = "-60px"; 
+            } else {
+                footer.style.bottom = "0"; 
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; 
+        });
+    </script>
 </body>
 </html>
