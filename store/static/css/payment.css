@@ -26,7 +26,7 @@ header h1 {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    color: #ffd700; /* Set color to gold */
+    color: #ffd700; 
     display: inline-block;
     padding: 5px 15px;
     transition: transform 0.3s ease;
