@@ -23,7 +23,7 @@
 
         h1, h2 {
             text-align: center;
-            font-weight: 500; /* Use Ubuntu font weights */
+            font-weight: 500; 
         }
 
         form div {
@@ -41,7 +41,7 @@
             padding: 0.7rem;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-family: 'Ubuntu', sans-serif; /* Apply Ubuntu font */
+            font-family: 'Ubuntu', sans-serif; 
         }
 
         button {
@@ -55,7 +55,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            font-family: 'Ubuntu', sans-serif; /* Apply Ubuntu font */
+            font-family: 'Ubuntu', sans-serif; 
         }
 
         button:hover {
