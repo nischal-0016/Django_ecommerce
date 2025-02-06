@@ -20,7 +20,7 @@ header {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Enhanced Navbar */
+
 nav {
     display: flex;
     justify-content: center;
@@ -68,7 +68,6 @@ nav a:hover, .logout-button:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Enhanced Container */
 .container {
     display: flex;
     flex-wrap: wrap;
@@ -201,8 +200,8 @@ h1::after {
 /* Enhanced Popup */
 .popup {
     position: fixed;
-    bottom: 20px; /* Position it at the bottom */
-    right: 20px; /* Position it at the right */
+    bottom: 20px;
+    right: 20px; 
     background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
     color: white;
     padding: 15px 25px;
@@ -210,7 +209,7 @@ h1::after {
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     opacity: 0;
-    transform: translateY(15px); /* Adjusted for smooth entry animation */
+    transform: translateY(15px); 
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 1000;
     font-weight: bold;
@@ -219,7 +218,7 @@ h1::after {
 
 .popup.show {
     opacity: 1;
-    transform: translateY(0); /* Adjusted for smooth entry animation */
+    transform: translateY(0); 
 }
 
 footer {
