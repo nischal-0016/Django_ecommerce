@@ -7,6 +7,30 @@
     <title>Payment</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/payment.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .payment-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 100px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+        }
+        .payment-option.selected {
+            border-color: #007bff;
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -24,7 +48,6 @@
         </a>
         {% endif %}
 
-        <!-- Profile Button -->
         {% if user.is_authenticated %}
         <a href="{% url 'profile' %}" class="profile-button">{{ user.username }}</a>
         {% else %}
@@ -41,26 +64,25 @@
         {% endif %}
     </nav>
 
-
     <div class="container">
         <h1>Payment Page</h1>
-        <form action="/process_payment/" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="card_number">Card Number:</label>
-                <input type="text" id="card_number" name="card_number" required>
-            </div>
-            <div class="form-group">
-                <label for="expiry_date">Expiry Date:</label>
-                <input type="text" id="expiry_date" name="expiry_date" required>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" name="cvv" required>
-            </div>
-            <button type="submit" class="pay-btn">Pay Now</button>
-        </form>
+        <div class="payment-options">
+            <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">eSewa</div>
+            <div class="payment-option" onclick="redirectToPayment('https://khalti.com/')">Khalti</div>
+            <div class="payment-option" onclick="redirectToPayment('cash_on_delivery')">Cash on Delivery</div>
+        </div>
     </div>
+
+    <script>
+        function redirectToPayment(url) {
+            if (url === 'cash_on_delivery') {
+                alert('Your order will be processed with Cash on Delivery.');
+                window.location.href = '/order_confirmation/';
+            } else {
+                window.location.href = url;
+            }
+        }
+    </script>
 
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
