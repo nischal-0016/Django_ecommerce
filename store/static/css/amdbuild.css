@@ -141,7 +141,6 @@ h1::after {
     display: block;
 }
 
-/* Enhanced Product List */
 .product-list {
     flex: 3;
     display: grid;
@@ -197,7 +196,6 @@ h1::after {
     transform: scale(1.05);
 }
 
-/* Enhanced Popup */
 .popup {
     position: fixed;
     bottom: 20px;

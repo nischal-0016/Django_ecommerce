@@ -16,7 +16,6 @@ header {
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-/* Enhanced Navbar Styling */
 nav {
     display: flex;
     justify-content: center;
@@ -69,7 +68,6 @@ nav a:hover, .logout-button:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Enhanced Title Styling */
 h1, .title {
     text-align: center;
     margin-top: 40px;
@@ -100,7 +98,6 @@ h1::after, .title::after {
     border-radius: 2px;
 }
 
-/* Enhanced Option Container */
 .option-container {
     display: flex;
     justify-content: center;
@@ -115,7 +112,6 @@ h1::after, .title::after {
     color: inherit;
 }
 
-/* Enhanced Option Cards */
 .option {
     background: rgba(255, 255, 255, 0.9);
     border: none;
@@ -176,7 +172,6 @@ footer {
     position: relative;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     nav {
         flex-wrap: wrap;
