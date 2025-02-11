@@ -55,40 +55,39 @@
 </script>
 <body>
     <header>
-        <h1 class="title">PCGeek - AMD Ryzen PC Build</h1>
+        <h1>PCGeek</h1>
         <nav>
-            <a href="{% url 'home' %}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="{% url 'custom_pc_build' %}">
-                <i class="fas fa-desktop"></i> Custom PC Build
-            </a>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
+
+            <!-- Cart Icon -->
             {% if user.is_authenticated %}
-                <a href="{% url 'cart' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                </a>
-            {% else %}
-                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i> Cart
-                </a>
-            {% endif %}
+            <a href="{% url 'cart' %}" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+        {% endif %}
+
+            <!-- Profile Button -->
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">
-                    <i class="fas fa-user"></i> {{ user.username }}
+                    {{ user.username }}
                 </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="profile-button">Profile</a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <!-- Logout form -->
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="logout-button">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <button type="submit" class="logout-button">Logout</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="profile-button">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-                <a href="{% url 'login' %}" class="login-button">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
+                <a href="{% url 'login' %}" class="login-button">Login</a>
             {% endif %}
         </nav>
     </header>

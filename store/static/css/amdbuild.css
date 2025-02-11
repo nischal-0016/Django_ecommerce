@@ -8,35 +8,47 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
-    color: white;
-    padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.title {
+    background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
     color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, #fff, #ffd700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    padding: 5px 15px;
+    transition: transform 0.3s ease;
+}
 
+header h1:hover {
+    transform: scale(1.05);
+}
+
+/* Navigation Bar Styling */
 nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 10px 0;
     gap: 15px;
-    background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
-    padding: 15px 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-nav a, .logout-button {
+nav a,
+.logout-button {
     position: relative;
     color: #ffffff;
     text-decoration: none;
     padding: 10px 20px;
-    margin: 0 5px;
     border-radius: 25px;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -47,7 +59,8 @@ nav a, .logout-button {
     overflow: hidden;
 }
 
-nav a::before, .logout-button::before {
+nav a::before,
+.logout-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -58,14 +71,16 @@ nav a::before, .logout-button::before {
     transition: 0.5s;
 }
 
-nav a:hover::before, .logout-button:hover::before {
+nav a:hover::before,
+.logout-button:hover::before {
     left: 100%;
 }
 
-nav a:hover, .logout-button:hover {
+nav a:hover,
+.logout-button:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .container {
