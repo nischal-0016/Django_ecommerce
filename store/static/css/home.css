@@ -1,237 +1,234 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700&display=swap');
-* {
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
+/* Global Styles */
+body {
+    font-family: 'Oxanium', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: white;
+    color: black;
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #461616;
-    line-height: 1.6;
-}
-
+/* Header (Navbar + Title) */
 header {
-    text-align: center;
-    background-color: #1A1A1B;
-    color: white;
-    padding: 20px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-
-header h1 {
-    font-size: 2.5em;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, #fff, #ffd700);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    display: inline-block;
-    padding: 5px 15px;
-    transition: transform 0.3s ease;
-}
-
-header h1:hover {
-    transform: scale(1.05);
-}
-
-/* Navigation Bar Styling */
-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-    gap: 15px;
-    background-color: #1A1A1B; 
-}
-
-nav a,
-.logout-button {
-    position: relative;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-}
-
-nav a::before,
-.logout-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: 0.5s;
-}
-
-nav a:hover::before,
-.logout-button:hover::before {
-    left: 100%;
-}
-
-nav a:hover,
-.logout-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Cart Icon Styling */
-.cart-item {
-    background: white;
-    border-radius: 12px;
-    margin: 15px 0;
-    padding: 20px;
+    background-color: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    padding: 15px 30px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.cart-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+/* PCGeek Title */
+header h1 {
+    color: white;
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
 }
 
-.cart-item input[type="number"] {
-    width: 70px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.cart-item input[type="number"]:focus {
-    outline: none;
-    border-color: #80341f;
-    box-shadow: 0 0 10px rgba(128,52,31,0.1);
-}
-
-/* Profile Button Styling */
-.profile-button {
+/* Navbar Container */
+.nav-container {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 20px;
 }
 
-.profile-button::before {
-    font-family: "Font Awesome 5 Free";
-    content: "\f007";
-    font-weight: 900;
+/* Navbar Links */
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-/* Product Grid Styling */
+nav a, .logout-button, .login-button {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 15px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover Effect */
+nav a:hover, .logout-button:hover, .login-button:hover {
+    background-color: rgb(159, 13, 13); /* Red hover color */
+    border-radius: 5px;
+}
+
+/* Logout Button */
+.logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    flex-direction: column;  /* Stack slogan and button vertically */
+    align-items: center;
+    justify-content: center; /* Center the content */
+    height: 100vh; /* Full-screen height */
+    padding: 0 50px;
+    margin-top: 70px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+/* Slogan Styling */
+.slogan {
+    font-size: 50px; /* Slightly smaller size */
+    font-weight: 800;
+    color: black;
+    text-align: center; /* Center the text */
+    max-width: 100%; /* Use full width */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Build Your PC Button Container */
+.build-pc-button-container {
+    text-align: center;
+    margin-top: 20px; /* Adds space below the slogan */
+}
+
+/* Build Your PC Button */
+.build-pc-button {
+    background-color: black; /* Black button color */
+    color: white;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.build-pc-button:hover {
+    background-color: rgb(159, 13, 13); /* Hover color */
+}
+
+/* Ensure the main content starts below the navbar */
+main {
+    margin-top: 100px;
+}
+
+
+/* Products Section */
+.products-section {
+    text-align: center; /* Center the title and content */
+    padding: 40px 20px;
+}
+
+/* Products Title (Black box with white text) */
+.products-section h2 {
+    background-color: black; /* Black background */
+    color: white; /* White text */
+    font-size: 32px;
+    font-weight: 800;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px; /* Slight rounding of corners */
+}
+
+/* Product Grid */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusts the number of columns based on screen size */
     gap: 20px;
-    padding: 20px;
-    justify-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    margin: 0 auto; /* Center the grid horizontally */
+    max-width: 1200px; /* Max width to control how wide the grid gets */
 }
 
+/* Product Cards (small box around products) */
 .product-card {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: center;
-    padding: 15px;
-    transition: transform 0.3s ease;
+    background-color: white; /* White background for product cards */
+    border: 1px solid #ddd; /* Light border around the card */
+    border-radius: 8px; /* Slight rounding of corners */
+    padding: 20px;
+    text-align: center; /* Center the content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add slight shadow for a lifted look */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px); /* Lift the card on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make the shadow more prominent */
 }
 
+/* Product Image */
 .product-card img {
-    width: 100%;
-    max-width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 15px; /* Space below the image */
 }
 
+/* Product Title */
 .product-card h3 {
-    font-size: 1.2em;
-    color: #333333;
-    margin-bottom: 5px;
-}
-
-.product-card p {
-    font-size: 1em;
-    color: #555555;
+    font-size: 18px;
     margin-bottom: 10px;
 }
 
+/* Product Price */
+.product-card p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Product Details Link */
 .product-card a {
-    display: inline-block;
-    padding: 10px 15px;
-    background: #80341f;
-    color: white;
+    color: #007BFF;
     text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9em;
-    transition: background 0.3s ease;
+    font-weight: 600;
+    transition: color 0.3s;
 }
 
 .product-card a:hover {
-    background: #461616;
+    color: #0056b3; /* Darker blue on hover */
 }
 
+
+/* Footer Section */
 footer {
+    background-color: #f1f1f1; /* Light gray background for the footer */
+    padding: 40px 20px;
     text-align: center;
-    padding: 20px 0;
-    background: linear-gradient(135deg, #4d1919 0%, #80341f 100%);
-    color: white;
-    font-size: 0.9rem;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    position: relative;
+    border-top: 2px solid #ddd; /* Thin border separating footer from main content */
 }
-/* Responsive Design */
-@media (max-width: 768px) {
-    nav {
-        flex-wrap: wrap;
-        padding: 5px;
-    }
 
-    nav a,
-    .logout-button {
-        padding: 8px 15px;
-        font-size: 0.9em;
-    }
+/* Footer Content (Logo and Message) */
+.footer-content {
+    display: flex;
+    justify-content: space-between; /* Space out logo and message */
+    align-items: center; /* Align items vertically in the center */
+    margin-bottom: 20px;
+}
 
-    header h1 {
-        font-size: 2em;
-    }
+.footer-logo img {
+    max-width: 180px; /* Increased the logo size */
+    height: auto;
+}
 
-    .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        padding: 10px;
-    }
+.footer-message {
+    max-width: 800px; /* Limit the width of the message for better readability */
+    text-align: left; /* Align text to the left */
+    font-size: 14px;
+    color: #333; /* Darker color for the text */
+}
 
-    .product-card h3 {
-        font-size: 1.1em;
-    }
+.footer-message p {
+    line-height: 1.6;
+}
 
-    .product-card p {
-        font-size: 1em;
-    }
+.footer-bottom {
+    font-size: 14px;
+    color: #777;
 }
