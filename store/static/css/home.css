@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
 
-/* Global Styles */
 body {
     font-family: 'Oxanium', sans-serif;
     margin: 0;
@@ -56,7 +55,7 @@ nav a, .logout-button, .login-button {
 
 /* Hover Effect */
 nav a:hover, .logout-button:hover, .login-button:hover {
-    background-color: rgb(159, 13, 13); /* Red hover color */
+    background-color: rgb(159, 13, 13); 
     border-radius: 5px;
 }
 
@@ -70,10 +69,10 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 /* Hero Section */
 .hero-section {
     display: flex;
-    flex-direction: column;  /* Stack slogan and button vertically */
+    flex-direction: column;  
     align-items: center;
-    justify-content: center; /* Center the content */
-    height: 100vh; /* Full-screen height */
+    justify-content: center; 
+    height: 100vh;
     padding: 0 50px;
     margin-top: 70px;
     background-color: white;
@@ -82,11 +81,11 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 
 /* Slogan Styling */
 .slogan {
-    font-size: 50px; /* Slightly smaller size */
+    font-size: 50px; 
     font-weight: 800;
     color: black;
-    text-align: center; /* Center the text */
-    max-width: 100%; /* Use full width */
+    text-align: center; 
+    max-width: 100%; 
     padding: 20px;
     box-sizing: border-box;
 }
@@ -94,12 +93,12 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 /* Build Your PC Button Container */
 .build-pc-button-container {
     text-align: center;
-    margin-top: 20px; /* Adds space below the slogan */
+    margin-top: 20px; 
 }
 
 /* Build Your PC Button */
 .build-pc-button {
-    background-color: black; /* Black button color */
+    background-color: black; 
     color: white;
     padding: 15px 30px;
     font-size: 18px;
@@ -110,10 +109,9 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .build-pc-button:hover {
-    background-color: rgb(159, 13, 13); /* Hover color */
+    background-color: rgb(159, 13, 13); 
 }
 
-/* Ensure the main content starts below the navbar */
 main {
     margin-top: 100px;
 }
@@ -121,46 +119,46 @@ main {
 
 /* Products Section */
 .products-section {
-    text-align: center; /* Center the title and content */
+    text-align: center; 
     padding: 40px 20px;
 }
 
-/* Products Title (Black box with white text) */
+/* Products Title*/
 .products-section h2 {
-    background-color: black; /* Black background */
-    color: white; /* White text */
+    background-color: black; 
+    color: white; 
     font-size: 32px;
     font-weight: 800;
     padding: 20px;
     margin-bottom: 30px;
-    border-radius: 8px; /* Slight rounding of corners */
+    border-radius: 8px; 
 }
 
 /* Product Grid */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusts the number of columns based on screen size */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 20px;
     padding: 0 20px;
     box-sizing: border-box;
-    margin: 0 auto; /* Center the grid horizontally */
-    max-width: 1200px; /* Max width to control how wide the grid gets */
+    margin: 0 auto; 
+    max-width: 1200px; 
 }
 
-/* Product Cards (small box around products) */
+/* Product Cards */
 .product-card {
-    background-color: white; /* White background for product cards */
-    border: 1px solid #ddd; /* Light border around the card */
-    border-radius: 8px; /* Slight rounding of corners */
+    background-color: white; 
+    border: 1px solid #ddd; 
+    border-radius: 8px;
     padding: 20px;
-    text-align: center; /* Center the content */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add slight shadow for a lifted look */
-    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+    text-align: center; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s, box-shadow 0.3s; 
 }
 
 .product-card:hover {
-    transform: translateY(-5px); /* Lift the card on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Make the shadow more prominent */
+    transform: translateY(-5px); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
 }
 
 /* Product Image */
@@ -168,7 +166,7 @@ main {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
-    margin-bottom: 15px; /* Space below the image */
+    margin-bottom: 15px;
 }
 
 /* Product Title */
@@ -192,36 +190,36 @@ main {
 }
 
 .product-card a:hover {
-    color: #0056b3; /* Darker blue on hover */
+    color: #0056b3; 
 }
 
 
 /* Footer Section */
 footer {
-    background-color: #f1f1f1; /* Light gray background for the footer */
+    background-color: #f1f1f1; 
     padding: 40px 20px;
     text-align: center;
-    border-top: 2px solid #ddd; /* Thin border separating footer from main content */
+    border-top: 2px solid #ddd; 
 }
 
-/* Footer Content (Logo and Message) */
+/* Footer Content  */
 .footer-content {
     display: flex;
-    justify-content: space-between; /* Space out logo and message */
-    align-items: center; /* Align items vertically in the center */
+    justify-content: space-between; 
+    align-items: center;
     margin-bottom: 20px;
 }
 
 .footer-logo img {
-    max-width: 180px; /* Increased the logo size */
+    max-width: 180px; 
     height: auto;
 }
 
 .footer-message {
-    max-width: 800px; /* Limit the width of the message for better readability */
-    text-align: left; /* Align text to the left */
+    max-width: 800px;
+    text-align: left; 
     font-size: 14px;
-    color: #333; /* Darker color for the text */
+    color: #333; 
 }
 
 .footer-message p {
