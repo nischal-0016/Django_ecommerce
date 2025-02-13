@@ -1,65 +1,68 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/custombuild.css' %}">
-    <title>PCGeek - Custom PC Build</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/custombuild.css' %}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <title>PCGeek - Custom PC Build</title>
+    </head>    
 <body>
+
+    <!-- Header -->
     <header>
         <h1>PCGeek</h1>
-        <nav>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
+        <div class="nav-container">
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'custom_pc_build' %}">Custom PC Build</a>
 
-            <!-- Cart Icon -->
-            {% if user.is_authenticated %}
-            <a href="{% url 'cart' %}" class="cart-icon">
-                <i class="fas fa-shopping-cart"></i> Cart
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
-                <i class="fas fa-shopping-cart"></i> Cart
-            </a>
-        {% endif %}
+                <!-- Cart Icon -->
+                {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}?next={% url 'cart' %}" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+                {% endif %}
 
-            <!-- Profile Button -->
-            {% if user.is_authenticated %}
+                <!-- Profile Button -->
+                {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
                 </a>
-            {% else %}
+                {% else %}
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
-            {% endif %}
+                {% endif %}
 
-            {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
                 <!-- Logout form -->
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
-            {% else %}
+                {% else %}
                 <a href="{% url 'login' %}" class="login-button">Login</a>
-            {% endif %}
-        </nav>
+                {% endif %}
+            </nav>
+        </div>
     </header>
 
     <h1>Choose Your Processor</h1>
     <div class="option-container">
         <a href="{% url 'intel_build' %}">
             <div class="option">
-                <img src="{% static '/images/intel.jpg' %}" alt="Intel Processor">
+                <img src="{% static 'images/intel.jpg' %}" alt="Intel Processor">
                 <h2>Intel</h2>
-                
             </div>
         </a>
         <a href="{% url 'amd_build' %}">
             <div class="option">
                 <img src="{% static 'images/amd.jpg' %}" alt="AMD Ryzen Processor">
                 <h2>AMD Ryzen</h2>
-               
             </div>
         </a>
     </div>
@@ -67,5 +70,6 @@
     <footer>
         <p>&copy; 2024 PCGeek - All rights reserved</p>
     </footer>
+
 </body>
 </html>

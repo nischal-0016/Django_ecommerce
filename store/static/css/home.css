@@ -72,21 +72,21 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     flex-direction: column;  
     align-items: center;
     justify-content: center; 
-    height: 100vh;
-    padding: 0 50px;
-    margin-top: 70px;
+    height: 40vh; /* Reduce height */
+    padding: 20px; /* Reduce padding */
+    margin-top: 20px; /* Reduce margin */
     background-color: white;
     box-sizing: border-box;
 }
 
 /* Slogan Styling */
 .slogan {
-    font-size: 50px; 
-    font-weight: 800;
+    font-size: 39px; /* Decrease font size */
+    font-weight: 700;
     color: black;
     text-align: center; 
     max-width: 100%; 
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
 }
 
@@ -100,8 +100,8 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 .build-pc-button {
     background-color: black; 
     color: white;
-    padding: 15px 30px;
-    font-size: 18px;
+    padding: 10px 20px;
+    font-size: 19px;
     font-weight: bold;
     text-decoration: none;
     border-radius: 5px;
@@ -206,7 +206,7 @@ footer {
 .footer-content {
     display: flex;
     justify-content: space-between; 
-    align-items: center;
+    align-items: right;
     margin-bottom: 20px;
 }
 
