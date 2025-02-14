@@ -53,10 +53,20 @@
     <div class="container">
         <h1>Payment Page</h1>
         <div class="payment-options">
-            <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">eSewa</div>
-            <div class="payment-option" onclick="redirectToPayment('https://khalti.com/')">Khalti</div>
-            <div class="payment-option" onclick="redirectToPayment('cash_on_delivery')">Cash on Delivery</div>
+            <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">
+                <img src="{% static 'images/esewa.png' %}" alt="eSewa">
+                <span>eSewa</span>
+            </div>
+            <div class="payment-option" onclick="redirectToPayment('https://khalti.com/')">
+                <img src="{% static 'images/khalti.png' %}" alt="Khalti">
+                <span>Khalti</span>
+            </div>
+            <div class="payment-option" onclick="redirectToPayment('cash_on_delivery')">
+                <img src="{% static 'images/COD.jpg' %}" alt="Cash on Delivery">
+                <span>Cash on Delivery</span>
+            </div>
         </div>
+        
     </div>
 
     <script>
