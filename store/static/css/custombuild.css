@@ -7,6 +7,7 @@ body {
     background-color: white;
     color: black;
     box-sizing: border-box;
+    text-align: center;
 }
 
 /* Header (Navbar + Title) */
@@ -66,16 +67,20 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     cursor: pointer;
 }
 
+/* Centered Main Heading */
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 50px;
+}
 
-
-
-
-
+/* Option Container */
 .option-container {
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-top: 50px;
+    margin-top: 30px;
     padding: 20px;
     flex-wrap: wrap;
 }
@@ -85,6 +90,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     color: inherit;
 }
 
+/* Option Cards */
 .option {
     background: rgba(255, 255, 255, 0.9);
     border: none;
@@ -133,6 +139,14 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     transform: scale(1.05);
 }
 
+/* Footer Section */
+footer {
+    background-color: #f1f1f1; 
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 2px solid #ddd; 
+}
+
 /* Footer Content  */
 .footer-content {
     display: flex;
@@ -159,6 +173,5 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 
 .footer-bottom {
     font-size: 14px;
-    text-align: center;
     color: #777;
 }

@@ -88,13 +88,13 @@
                         <div class="item-details">
                             {% if item.product %}
                                 <strong>{{ item.product.name }}</strong>
-                                <div>Price: {{ item.product.price }} Rs.</div>
+                                <div>Price: Rs. {{ item.product.price }}</div>
                             {% elif item.intel_product %}
                                 <strong>{{ item.intel_product.name }}</strong>
-                                <div>Price: {{ item.intel_product.price }} Rs.</div>
+                                <div>Price:Rs. {{ item.intel_product.price }}</div>
                             {% elif item.amd_product %}
                                 <strong>{{ item.amd_product.name }}</strong>
-                                <div>Price: {{ item.amd_product.price }} Rs.</div>
+                                <div>Price: Rs. {{ item.amd_product.price }} </div>
                             {% endif %}
                         </div>
                         
@@ -107,13 +107,13 @@
                         
                         
                         <div class="item-total">
-                            Total: <strong><span id="total-{{ item.id }}">{{ item.total_price }} Rs.</span></strong>
+                            Total: <strong><span id="total-{{ item.id }}">Rs. {{ item.total_price }} </span></strong>
                         </div>
                     </li>
                 {% endfor %}
             </ul>
             <div class="total-price">
-                <strong>Total Price of Cart: <span id="total-price">{{ total_price }} Rs.</span></strong>
+                <strong>Total Price of Cart: <span id="total-price">Rs. {{ total_price }}</span></strong>
                 <a href="{% url 'order' %}" class="order-button">
                     <i class="fas fa-credit-card"></i> Order
                 </a>
