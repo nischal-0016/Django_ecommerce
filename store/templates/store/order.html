@@ -77,14 +77,14 @@
                         <td>{{ item.quantity }}</td>
                         <td>
                             {% if item.product %}
-                                {{ item.product.price }} Rs.
+                                Rs. {{ item.product.price }}
                             {% elif item.intel_product %}
-                                {{ item.intel_product.price }} Rs.
+                                Rs. {{ item.intel_product.price }}
                             {% elif item.amd_product %}
-                                {{ item.amd_product.price }} Rs.
+                                Rs. {{ item.amd_product.price }}
                             {% endif %}
                         </td>
-                        <td>{{ item.total_price }} Rs.</td>
+                        <td> Rs. {{ item.total_price }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -122,7 +122,7 @@
         </div>
 
         <div class="total-price">
-            <h2>Total Price: {{ total_cost }} Rs.</h2>
+            <h2>Total Price: Rs. {{ total_cost }}</h2>
             <button class="proceed-to-pay-btn" onclick="location.href='/payment/'">Proceed to Pay</button>
         </div>
         

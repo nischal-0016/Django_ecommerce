@@ -77,7 +77,7 @@
                     <img src="{% static 'img/default_product.png' %}" alt="Default Image">
                 {% endif %}
                 <h3>{{ product.name }}</h3>
-                <p>{{ product.price }} Rs</p>
+                <p>Rs. {{ product.price }}</p>
                 <a href="{% url 'product_detail' product.id %}">View Details</a>
             </div>
             {% endfor %}
