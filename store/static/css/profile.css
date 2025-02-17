@@ -88,9 +88,9 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 /* Main Content Styling */
 .container {
     width: 100%;
-    max-width: 600px;
+    max-width: 500px; 
     margin: 30px auto;
-    padding: 20px;
+    padding: 15px; 
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -98,27 +98,27 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 
 .container h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px; 
     color: #451b1b;
-    font-size: 28px;
+    font-size: 24px; 
     font-weight: 700;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px; 
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 6px; 
     font-weight: bold;
     color: #461616;
-    font-size: 16px;
+    font-size: 14px; 
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px;
+    padding: 10px; 
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
@@ -126,31 +126,29 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
-    border-color: #80341f;
-    outline: none;
-}
-
 .form-actions {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 15px; 
 }
 
 .btn-primary {
-    background-color: black; 
+    font-family: 'Oxanium', sans-serif;
+    background-color: black;
     color: white;
     border: none;
-    padding: 12px 25px;
+    padding: 10px 20px; 
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px; 
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+
 .btn-primary:hover {
     transform: scale(1.05);
-    background-color: rgb(159, 13, 13); 
+    background-color: rgb(159, 13, 13);
 }
+
 
 /* Popup Style */
 .popup {
@@ -181,9 +179,6 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     font-size: 16px; 
     font-weight: 500;
 }
-
-
-
 
 /* Footer Content */
 .footer-content {
