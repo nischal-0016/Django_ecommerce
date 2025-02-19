@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
 body {
     margin: 0;
-    font-family: 'Ubuntu', sans-serif; 
+    font-family: 'Oxanium', sans-serif;
     background-size: cover;
     color: #ffffff;
 }
@@ -22,6 +22,7 @@ main {
 }
 
 h1, h2 {
+    font-family: 'Oxanium', sans-serif;
     text-align: center;
     font-weight: 500; 
 }
@@ -55,7 +56,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-family: 'Ubuntu', sans-serif; 
+    font-family: 'Oxanium', sans-serif; 
 }
 
 button:hover {
