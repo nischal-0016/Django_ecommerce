@@ -156,7 +156,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .product-description {
-    list-style-type: none; /* Removes the default list bullets */
+    list-style-type: none; 
     padding: 0;
     margin: 20px 0;
 }
@@ -167,7 +167,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .product-description li strong {
-    color: #451b1b; /* Color for labels like "Product Name", "Price", etc. */
+    color: #451b1b; 
 }
 
 /* Footer Section */
