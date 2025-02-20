@@ -102,13 +102,18 @@
         <div class="product-detail">
             <img src="{{ product.image.url }}" alt="{{ product.name }}">
             <h2>{{ product.name }}</h2>
-            <p>Rs. {{ product.price }}</p>
-            <p>{{ product.description }}</p>
-    
+        
+            <ul class="product-description">
+                <li><strong>Product Name:</strong> {{ product.name }}</li>
+                <li><strong>Price:</strong> Rs. {{ product.price }}</li>
+                <li><strong>Description:</strong> {{ product.description }}</li>
+            </ul>
+        
             <label for="quantity-input">Quantity:</label>
             <input type="number" id="quantity-input" name="quantity" value="1" min="1">
             <button type="button" onclick="addToCart('{{ product.id }}')" class="add-to-cart-button">Add to Cart</button>
         </div>
+        
     </main>
 
     <div class="cart-popup"></div>
