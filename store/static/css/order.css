@@ -134,7 +134,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .proceed-to-pay-btn {
-    background: linear-gradient(135deg,rgb(123, 49, 49) 0%,rgb(114, 47, 47) 100%); /* Vibrant orange gradient */
+    background: linear-gradient(135deg,rgb(123, 49, 49) 0%,rgb(114, 47, 47) 100%);
     border: none;
     color: white;
     padding: 10px 20px;
@@ -151,7 +151,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .proceed-to-pay-btn:hover {
-    background: linear-gradient(135deg,rgb(159, 47, 47) 0%,rgb(107, 29, 29) 100%); /* Reversed gradient for hover */
+    background: linear-gradient(135deg,rgb(159, 47, 47) 0%,rgb(107, 29, 29) 100%); 
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
 }
