@@ -132,6 +132,13 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
 }
 
+.quantity-dropdown {
+    padding: 5px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+
 .cart-popup {
     visibility: hidden;
     opacity: 0;

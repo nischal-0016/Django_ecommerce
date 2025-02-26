@@ -109,8 +109,14 @@
                 <li><strong>Description:</strong> {{ product.description }}</li>
             </ul>
         
-            <label for="quantity-input">Quantity:</label>
-            <input type="number" id="quantity-input" name="quantity" value="1" min="1">
+            <label for="quantity-input">Quantity:</label> 
+            <select id="quantity-input" name="quantity" class="quantity-dropdown">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
             <button type="button" onclick="addToCart('{{ product.id }}')" class="add-to-cart-button">Add to Cart</button>
         </div>
         
