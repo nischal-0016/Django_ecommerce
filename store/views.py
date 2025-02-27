@@ -167,11 +167,9 @@ def add_amd_product_to_cart(request, product_id):
 def remove_from_cart(request, item_id):
     if request.method == 'POST':
         try:
-            # Fetch and delete the cart item
             cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
             cart_item.delete()
 
-            # Calculate the total cart price after item removal
             total_cart_price = sum(item.total_price() for item in request.user.cart.cart_items.all())
 
             return JsonResponse({'success': True, 'total_cart_price': total_cart_price})
@@ -240,16 +238,13 @@ def order_page(request):
 def payment_view(request):
     return render(request, 'store/payment.html')
 
-
+# invoice generation view
 @login_required
 def cash_on_delivery(request):
-    # Get the user's cart items
     cart_items = CartItem.objects.filter(cart__user=request.user)
 
-    # Calculate total price
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
-    # Create an order in the database
     order = Order.objects.create(
         user=request.user,
         total_price=total_price,
@@ -257,20 +252,15 @@ def cash_on_delivery(request):
         status="Pending"
     )
 
-    # Generate invoice HTML content
     invoice_html = render_to_string('store/invoice_template.html', {'order': order, 'cart_items': cart_items})
 
-    # Define the path where the PDF should be saved (e.g., inside MEDIA_ROOT)
     pdf_file_name = f"invoice_{order.id}.pdf"
     pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'invoices', pdf_file_name)
 
-    # Create directory if not exists
     os.makedirs(os.path.dirname(pdf_file_path), exist_ok=True)
 
-    # Generate the PDF and save it to the server
     pdfkit.from_string(invoice_html, pdf_file_path, configuration=settings.PDFKIT_CONFIG)
 
-    # Pass the PDF file path to the template for download
     pdf_url = f"{settings.MEDIA_URL}invoices/{pdf_file_name}"
 
     return render(request, 'store/cashondelivery.html', {'pdf_url': pdf_url})
