@@ -72,13 +72,13 @@
     <script>
         function redirectToPayment(url) {
             if (url === 'cash_on_delivery') {
-                alert('Your order will be processed with Cash on Delivery.');
-                window.location.href = '/order_confirmation/';
+                window.location.href = "{% url 'cash_on_delivery' %}";
             } else {
                 window.location.href = url;
             }
         }
     </script>
+    
 
     <!-- Footer Section -->
     <footer>

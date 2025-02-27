@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory
+from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.template.loader import render_to_string
+from django.conf import settings
+import pdfkit,os
 
 
 # View to list all products
@@ -236,3 +239,38 @@ def order_page(request):
 
 def payment_view(request):
     return render(request, 'store/payment.html')
+
+
+@login_required
+def cash_on_delivery(request):
+    # Get the user's cart items
+    cart_items = CartItem.objects.filter(cart__user=request.user)
+
+    # Calculate total price
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    # Create an order in the database
+    order = Order.objects.create(
+        user=request.user,
+        total_price=total_price,
+        payment_method="Cash on Delivery",
+        status="Pending"
+    )
+
+    # Generate invoice HTML content
+    invoice_html = render_to_string('store/invoice_template.html', {'order': order, 'cart_items': cart_items})
+
+    # Define the path where the PDF should be saved (e.g., inside MEDIA_ROOT)
+    pdf_file_name = f"invoice_{order.id}.pdf"
+    pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'invoices', pdf_file_name)
+
+    # Create directory if not exists
+    os.makedirs(os.path.dirname(pdf_file_path), exist_ok=True)
+
+    # Generate the PDF and save it to the server
+    pdfkit.from_string(invoice_html, pdf_file_path, configuration=settings.PDFKIT_CONFIG)
+
+    # Pass the PDF file path to the template for download
+    pdf_url = f"{settings.MEDIA_URL}invoices/{pdf_file_name}"
+
+    return render(request, 'store/cashondelivery.html', {'pdf_url': pdf_url})

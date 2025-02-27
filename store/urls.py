@@ -42,6 +42,9 @@ urlpatterns = [
     path('order/', views.order_page, name='order'),
 
     path('payment/', payment_view, name='payment'),
+
+    path('cash_on_delivery/', views.cash_on_delivery, name='cash_on_delivery'),
+
 ]
 
 if settings.DEBUG:
