@@ -109,6 +109,7 @@ class Profile(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=255, blank=True, default='Not Provided')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50)
     status = models.CharField(max_length=20, default="Pending") 
