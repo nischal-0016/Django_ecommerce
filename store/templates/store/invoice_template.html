@@ -20,10 +20,9 @@
         <p><strong>Order ID:</strong> {{ order.id }}</p>
         <p><strong>User:</strong> {{ order.user.username }}</p>
         <p><strong>Email:</strong> {{ order.user.email }}</p>
-        <p><strong>Total Price:</strong> Rs.{{ order.total_price }}</p>
         <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
         <p><strong>Status:</strong> {{ order.status }}</p>
-        <p><strong>Date:</strong> {{ order.created_at }}</p>
+        <p><strong>Date:</strong> {{ order.created_at|date:"Y-m-d H:i:s" }}</p>
 
         <h3>Order Details:</h3>
         <table>
@@ -39,6 +38,11 @@
                 <td>Rs.{{ item.product.price }}</td>
             </tr>
             {% endfor %}
+            <!-- Total Price Row -->
+            <tr>
+                <td colspan="2" style="text-align: right; font-weight: bold;">Total Price:</td>
+                <td><strong>Rs.{{ order.total_price }}</strong></td>
+            </tr>
         </table>
     </div>
 </body>
