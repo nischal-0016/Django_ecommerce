@@ -6,17 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/COD.css' %}">
     <title>Cash on Delivery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+        h1 {
+            color: #28a745;
+            font-size: 24px;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .home-btn {
+            background-color: #6c757d;
+        }
+        .home-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
-    <h1>Thank You for Your Purchase!</h1>
-    <p>Your order has been placed with Cash on Delivery.</p>
-    
-    {% if pdf_url %}
-        <a href="{{ pdf_url }}" download>
-            <button>Download Invoice</button>
+    <div class="container">
+        <h1>Thank You for Your Purchase!</h1>
+        <p>Your order has been placed with Cash on Delivery.</p>
+
+        {% if pdf_url %}
+            <a href="{{ pdf_url }}" download>
+                <button class="btn">Download Invoice</button>
+            </a>
+        {% else %}
+            <p style="color: red;">Invoice is not available.</p>
+        {% endif %}
+
+        <a href="{% url 'home' %}">
+            <button class="btn home-btn">Go Back Home</button>
         </a>
-    {% else %}
-        <p>Invoice is not available.</p>
-    {% endif %}
+    </div>
 </body>
 </html>
