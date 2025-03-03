@@ -252,6 +252,7 @@ def cash_on_delivery(request):
         status="Pending"
     )
 
+    # Generate invoice HTML
     invoice_html = render_to_string('store/invoice_template.html', {'order': order, 'cart_items': cart_items})
 
     pdf_file_name = f"invoice_{order.id}.pdf"
@@ -259,7 +260,12 @@ def cash_on_delivery(request):
 
     os.makedirs(os.path.dirname(pdf_file_path), exist_ok=True)
 
+    # Generate PDF
     pdfkit.from_string(invoice_html, pdf_file_path, configuration=settings.PDFKIT_CONFIG)
+
+    # Save the file path in the database
+    order.invoice.name = f"invoices/{pdf_file_name}"
+    order.save()
 
     pdf_url = f"{settings.MEDIA_URL}invoices/{pdf_file_name}"
 

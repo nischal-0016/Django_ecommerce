@@ -114,3 +114,5 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=50)
     status = models.CharField(max_length=20, default="Pending") 
     created_at = models.DateTimeField(auto_now_add=True)
+    invoice = models.FileField(upload_to='invoices/', blank=True, null=True)
+
