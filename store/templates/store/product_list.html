@@ -29,7 +29,6 @@
                 </a>
                 {% endif %}
     
-                <!-- Profile Button -->
                 {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
@@ -39,7 +38,6 @@
                 {% endif %}
     
                 {% if user.is_authenticated %}
-                <!-- Logout form -->
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
@@ -53,21 +51,17 @@
 
     <main>
         <div class="hero-section">
-            <!-- Slogan -->
             <div class="slogan">
                 Welcome to PCGeek – Where Tech Meets Performance & You Build Your Dream PC!
             </div>
-            <!-- Build Your PC Button -->
             <div class="build-pc-button-container">
                 <a href="{% url 'custom_pc_build' %}" class="build-pc-button">Build Your PC</a>
             </div>
         </div>
-        <!-- Products Message Section -->
         <div class="products-section">
             <h2>Products We Have</h2>
         </div>
 
-        <!-- Product Grid -->
         <div class="product-grid">
             {% for product in products %}
             <div class="product-card">
@@ -84,7 +78,6 @@
         </div>
     </main>
 
-    <!-- Footer Section -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
