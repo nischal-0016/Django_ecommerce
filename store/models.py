@@ -34,7 +34,7 @@ class IntelProduct(models.Model):
     id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(blank=True, null=True)
+    # description = models.TextField(blank=True, null=True)
     category = models.ForeignKey('IntelCategory', on_delete=models.CASCADE, related_name='intel_products')
     image = models.ImageField(upload_to='intel_products/', blank=True, null=True)
 
@@ -53,7 +53,7 @@ class AMDProduct(models.Model):
     id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(blank=True, null=True)
+    # description = models.TextField(blank=True, null=True)
     category = models.ForeignKey('AMDCategory', on_delete=models.CASCADE, related_name='amd_products')
     image = models.ImageField(upload_to='amd_products/', blank=True, null=True)
 
