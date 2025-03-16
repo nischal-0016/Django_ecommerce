@@ -20,7 +20,6 @@ header {
     box-sizing: border-box;
 }
 
-/* PCGeek Title */
 header h1 {
     color: white;
     font-size: 24px;
@@ -28,14 +27,12 @@ header h1 {
     margin: 0;
 }
 
-/* Navbar Container */
 .nav-container {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-/* Navbar Links */
 nav {
     display: flex;
     gap: 20px;
@@ -53,20 +50,17 @@ nav a, .logout-button, .login-button {
     align-items: center;
 }
 
-/* Hover Effect */
 nav a:hover, .logout-button:hover, .login-button:hover {
     background-color: rgb(159, 13, 13); 
     border-radius: 5px;
 }
 
-/* Logout Button */
 .logout-button {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-/* Hero Section */
 .hero-section {
     display: flex;
     flex-direction: column;  
@@ -79,7 +73,6 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     box-sizing: border-box;
 }
 
-/* Slogan Styling */
 .slogan {
     font-size: 39px; 
     font-weight: 700;
@@ -90,13 +83,11 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     box-sizing: border-box;
 }
 
-/* Build Your PC Button Container */
 .build-pc-button-container {
     text-align: center;
     margin-top: 20px; 
 }
 
-/* Build Your PC Button */
 .build-pc-button {
     background-color: black; 
     color: white;
@@ -117,13 +108,11 @@ main {
 }
 
 
-/* Products Section */
 .products-section {
     text-align: center; 
     padding: 40px 20px;
 }
 
-/* Products Title*/
 .products-section h2 {
     background-color: black; 
     color: white; 
@@ -134,7 +123,6 @@ main {
     border-radius: 8px; 
 }
 
-/* Product Grid */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
@@ -145,7 +133,6 @@ main {
     max-width: 1200px; 
 }
 
-/* Product Cards */
 .product-card {
     background-color: white; 
     border: 1px solid #ddd; 
@@ -161,7 +148,6 @@ main {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
 }
 
-/* Product Image */
 .product-card img {
     max-width: 100%;
     height: auto;
@@ -169,19 +155,16 @@ main {
     margin-bottom: 15px;
 }
 
-/* Product Title */
 .product-card h3 {
     font-size: 18px;
     margin-bottom: 10px;
 }
 
-/* Product Price */
 .product-card p {
     font-size: 16px;
     margin-bottom: 15px;
 }
 
-/* Product Details Link */
 .product-card a {
     color: #007BFF;
     text-decoration: none;
@@ -202,7 +185,6 @@ footer {
     border-top: 2px solid #ddd; 
 }
 
-/* Footer Content  */
 .footer-content {
     display: flex;
     justify-content: space-between; 

@@ -53,7 +53,6 @@ nav a, .logout-button, .login-button {
     align-items: center;
 }
 
-/* Hover Effect */
 nav a:hover, .logout-button:hover, .login-button:hover {
     background-color: rgb(159, 13, 13); 
     border-radius: 5px;
@@ -152,7 +151,8 @@ input {
     background: linear-gradient(135deg, #451b1b 0%, #80341f 100%);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-/* Footer Section */
+
+
 footer {
     background-color: #f1f1f1; 
     padding: 40px 20px;

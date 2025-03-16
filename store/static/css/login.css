@@ -120,7 +120,6 @@ a:hover {
     border-color: #f5c6cb;
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
     main {
         padding: 1.5rem;
