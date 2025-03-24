@@ -54,13 +54,11 @@ nav a, .logout-button, .login-button {
     align-items: center;
 }
 
-/* Hover Effect */
 nav a:hover, .logout-button:hover, .login-button:hover {
     background-color: rgb(159, 13, 13); 
     border-radius: 5px;
 }
 
-/* Logout Button */
 .logout-button {
     background: none;
     border: none;
@@ -184,7 +182,6 @@ h2::after {
 }
 
 
-/* Footer Section */
 footer {
     background-color: #f1f1f1; 
     padding: 40px 20px;

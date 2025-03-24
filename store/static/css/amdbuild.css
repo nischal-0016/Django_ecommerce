@@ -28,14 +28,12 @@ header h1 {
     margin: 0;
 }
 
-/* Navbar Container */
 .nav-container {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-/* Navbar Links */
 nav {
     display: flex;
     gap: 20px;
