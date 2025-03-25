@@ -21,7 +21,6 @@ header {
     box-sizing: border-box;
 }
 
-/* PCGeek Title */
 header h1 {
     color: white;
     font-size: 24px;
@@ -29,14 +28,12 @@ header h1 {
     margin: 0;
 }
 
-/* Navbar Container */
 .nav-container {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-/* Navbar Links */
 nav {
     display: flex;
     gap: 20px;
@@ -54,7 +51,6 @@ nav a, .logout-button, .login-button {
     align-items: center;
 }
 
-/* Hover Effect */
 nav a:hover, .logout-button:hover, .login-button:hover {
     background-color: rgb(159, 13, 13); 
     border-radius: 5px;
