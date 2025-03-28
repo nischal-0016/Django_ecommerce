@@ -7,7 +7,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     # Home and Product URLs
-    path('', views.product_list, name='home'),  # Main page to list all products
+    path('', views.product_list, name='home'),  
     path('categories/', views.category_list, name='category_list'),  # Category listing page
 
     # Update URL pattern to accept string-based custom IDs for products
@@ -23,7 +23,6 @@ urlpatterns = [
     # Cart management URLs
     path('cart/', views.cart_view, name='cart'),  # Cart page
 
-    # path('cart/update/<str:product_id>/', views.update_cart_quantity, name='update_cart_quantity'),  # Update quantity in the cart
     path('cart/remove/<str:item_id>/', views.remove_from_cart, name='remove_from_cart'),  # Remove item from cart
 
     # User Authentication URLs
