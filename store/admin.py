@@ -36,3 +36,7 @@ admin.site.register(IntelProduct, IntelProductAdmin)
 admin.site.register(AMDCategory, AMDCategoryAdmin)
 admin.site.register(AMDProduct, AMDProductAdmin)
 admin.site.register(Order)
+
+admin.site.site_header = "PCGeek Admin Panel"
+admin.site.site_title = "PCGeek Admin"
+admin.site.index_title = "Welcome to PCGeek Administration"
