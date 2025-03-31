@@ -100,7 +100,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .sidebar li.selected {
-    background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
+    background:rgb(19, 1, 1);
     color: #fff;
     transform: translateX(5px);
     box-shadow: 0 5px 15px rgba(128,52,31,0.2);
@@ -151,7 +151,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .product-btn {
-    background-color: #80341f;
+    background-color: rgb(11, 1, 1);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -162,7 +162,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .product-btn:hover {
-    background-color: #5c2b1b;
+    background-color: rgb(159, 13, 13);
     transform: scale(1.05);
 }
 
@@ -170,7 +170,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #4caf50;
+    background: rgb(159, 13, 13);
     color: white;
     padding: 15px 20px;
     border-radius: 10px;
