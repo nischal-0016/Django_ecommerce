@@ -2,66 +2,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/intelbuild.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Intel PC Build</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/intelbuild.css' %}">
+    <title>PCGeek - Store</title>
 </head>
-<script>
-    function showPopup(message) {
-        const popup = document.createElement('div');
-        popup.classList.add('popup');
-        popup.textContent = message;
-        document.body.appendChild(popup);
-    
-        setTimeout(() => {
-            popup.classList.add('show');
-        }, 10);
-    
-        setTimeout(() => {
-            popup.classList.remove('show');
-            setTimeout(() => popup.remove(), 300); 
-        }, 2000);
-    }
-    
-    function addToCart(productId, isIntel = false, isAMD = false) {
-        const url = isIntel ? `/product/intel/${productId}/add-to-cart/` :
-                    isAMD ? `/product/amd/${productId}/add-to-cart/` :
-                    `/product/${productId}/add-to-cart/`;
-    
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}', 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productId })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to add item to cart');
-            }
-        })
-        .then(data => {
-            if (data.success) {
-                showPopup('Item added to cart!');
-            } else {
-                showPopup('Failed to add item to cart');
-            }
-        })
-        .catch(error => {
-            console.error('Error adding to cart:', error);
-            showPopup('Item added to cart');
-        });
-    }  
-</script>
-
-
 <body>
+
     <header>
         <h1>PCGeek</h1> 
         <div class="nav-container">
@@ -78,7 +27,6 @@
                     <i class="fas fa-shopping-cart"></i> Cart
                 </a>
                 {% endif %}
-    
                 {% if user.is_authenticated %}
                 <a href="{% url 'profile' %}" class="profile-button">
                     {{ user.username }}
@@ -88,7 +36,6 @@
                 {% endif %}
     
                 {% if user.is_authenticated %}
-
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
@@ -100,36 +47,49 @@
         </div>
     </header>
 
-    
-    <div class="page-heading">
-        <h1>Intel PC Build</h1>
-    </div>    
-
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                {% for category in categories %}
-                    <li class="{% if category.id|stringformat:"s" == request.GET.category_id %}selected{% endif %}">
-                        <a href="?category_id={{ category.id }}">{{ category.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+        <h2>Components</h2>
+        <table class="components-table">
+            {% for category in categories %}
+            <tr>
+                <td class="category-name"><strong>{{ category.name }}</strong></td>
+                <td class="selected-product" id="selected-{{ category.id }}">
+                    No {{ category.name }} Selected
+                </td>
+                <td class="select-btn">
+                    <button onclick="toggleDropdown('{{ category.id }}')">Select</button>
+                </td>
+            </tr>
+            <tr id="dropdown-row-{{ category.id }}" class="dropdown-row">
+                <td colspan="3" class="dropdown-container">
+                    <div class="dropdown" id="dropdown-{{ category.id }}">
+                        {% for product in category.intel_products.all %}
+                        <div class="dropdown-item">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            <span>{{ product.name }} - Rs {{ product.price }}</span>
+                            <button onclick="selectProduct('{{ category.id }}', '{{ product.id }}', '{{ product.name }}', '{{ product.image.url }}')">Add</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
-        <div class="product-list">
-            {% if products %}
-                {% for product in products %}
-                <div class="product-item">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <span>{{ product.name }} - Rs {{ product.price }}</span>
-                    <button type="button" class="product-btn" onclick="addToCart('{{ product.id }}', true)">Add to Cart</button>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p>Please select a category to view products.</p>
-            {% endif %}
-        </div>
+        <form id="intel-product-form">
+            {% csrf_token %}
+            {% for product in products %}
+                <label>
+                    <input type="checkbox" class="intel-product-checkbox" value="{{ product.id }}">
+                    {{ product.name }}
+                </label><br>
+            {% endfor %}
+            <button type="button" onclick="addSelectedIntelProductsToCart()">Add to Cart</button>
+        </form>
+        
     </div>
+
+
 
     <footer>
         <div class="footer-content">
@@ -145,5 +105,101 @@
             <p>&copy; 2024 PCGeek - All rights reserved</p>
         </div>
     </footer>
+
+    <script>
+        function toggleDropdown(categoryId) {
+            let dropdownRow = document.getElementById("dropdown-row-" + categoryId);
+            let dropdown = document.getElementById("dropdown-" + categoryId);
+    
+            // Toggle visibility of the dropdown
+            if (dropdownRow.style.display === "none" || dropdownRow.style.display === "") {
+                dropdownRow.style.display = "table-row";
+                dropdown.style.display = "block";
+            } else {
+                dropdownRow.style.display = "none";
+                dropdown.style.display = "none";
+            }
+        }
+    
+        let selectedProducts = {};
+    
+        function selectProduct(categoryId, productId, productName, productImage) {
+            let selectedField = document.getElementById("selected-" + categoryId);
+            selectedField.innerHTML = `<img src="${productImage}" width="40"> ${productName}`;
+            
+            // Store selected product
+            selectedProducts[categoryId] = { productId, productName, productImage };
+            
+            // Hide dropdown after selection
+            document.getElementById("dropdown-row-" + categoryId).style.display = "none";
+            
+            // Don't add to cart or redirect here
+        }
+        
+        
+    
+        function addSelectedIntelProductsToCart() {
+            var selectedProductIds = [];
+            
+            // First, collect all products from the dropdown selections
+            for (let categoryId in selectedProducts) {
+                if (selectedProducts.hasOwnProperty(categoryId)) {
+                    selectedProductIds.push(selectedProducts[categoryId].productId);
+                }
+            }
+            
+            // Then add any checked products from the checkbox list
+            $('.intel-product-checkbox:checked').each(function() {
+                selectedProductIds.push($(this).val());
+            });
+        
+            // If no products are selected, alert the user
+            if (selectedProductIds.length === 0) {
+                alert("Please select at least one product.");
+                return;
+            }
+        
+            // Get CSRF token
+            const csrftoken = getCookie('csrftoken');
+        
+            // Send AJAX request to add selected products to cart
+            $.ajax({
+                url: '/custom-pc-build/intel/add-to-cart/',
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                data: {
+                    'product_ids[]': selectedProductIds,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect_url || '/cart/';
+                    }
+                },
+                error: function(error) {
+                    console.error("Error:", error);
+                    alert('There was an error adding products to the cart.');
+                }
+            });
+        }
+        
+    
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                let cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.split("=")[1]);
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+    
 </body>
 </html>

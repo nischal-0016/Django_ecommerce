@@ -29,7 +29,7 @@ class IntelCategory(models.Model):
     def __str__(self):
         return self.name
 
-# AMD-specific product model linked to INETLCategory
+# Intel-specific product model linked to INETLCategory
 class IntelProduct(models.Model):
     id = models.CharField(primary_key=True, max_length=100) 
     name = models.CharField(max_length=100)
@@ -89,6 +89,26 @@ class CartItem(models.Model):
         elif self.amd_product:
             return f"{self.quantity} of {self.amd_product.name} in {self.cart.user.username}'s cart"
 
+    def get_price(self):
+        """Return the unit price of the item"""
+        if self.product:
+            return self.product.price
+        elif self.intel_product:
+            return self.intel_product.price
+        elif self.amd_product:
+            return self.amd_product.price
+        return 0  # Default if no product is set
+    
+    def get_name(self):
+        """Return the name of the product"""
+        if self.product:
+            return self.product.name
+        elif self.intel_product:
+            return self.intel_product.name
+        elif self.amd_product:
+            return self.amd_product.name
+        return "Unknown Product"
+
     def total_price(self):
         if self.product:
             return self.quantity * self.product.price
@@ -96,7 +116,6 @@ class CartItem(models.Model):
             return self.quantity * self.intel_product.price
         elif self.amd_product:
             return self.quantity * self.amd_product.price
-
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
