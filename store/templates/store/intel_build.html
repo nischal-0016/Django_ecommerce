@@ -126,64 +126,67 @@
         function selectProduct(categoryId, productId, productName, productImage) {
             let selectedField = document.getElementById("selected-" + categoryId);
             selectedField.innerHTML = `<img src="${productImage}" width="40"> ${productName}`;
-            
+    
             // Store selected product
             selectedProducts[categoryId] = { productId, productName, productImage };
-            
+    
             // Hide dropdown after selection
             document.getElementById("dropdown-row-" + categoryId).style.display = "none";
-            
+    
             // Don't add to cart or redirect here
         }
-        
-        
     
         function addSelectedIntelProductsToCart() {
-            var selectedProductIds = [];
-            
-            // First, collect all products from the dropdown selections
-            for (let categoryId in selectedProducts) {
-                if (selectedProducts.hasOwnProperty(categoryId)) {
-                    selectedProductIds.push(selectedProducts[categoryId].productId);
-                }
-            }
-            
-            // Then add any checked products from the checkbox list
-            $('.intel-product-checkbox:checked').each(function() {
-                selectedProductIds.push($(this).val());
-            });
-        
-            // If no products are selected, alert the user
-            if (selectedProductIds.length === 0) {
-                alert("Please select at least one product.");
-                return;
-            }
-        
-            // Get CSRF token
-            const csrftoken = getCookie('csrftoken');
-        
-            // Send AJAX request to add selected products to cart
-            $.ajax({
-                url: '/custom-pc-build/intel/add-to-cart/',
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                data: {
-                    'product_ids[]': selectedProductIds,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = response.redirect_url || '/cart/';
+            // Check if the user is logged in by verifying the `user.is_authenticated` value.
+            {% if user.is_authenticated %}
+                var selectedProductIds = [];
+    
+                // First, collect all products from the dropdown selections
+                for (let categoryId in selectedProducts) {
+                    if (selectedProducts.hasOwnProperty(categoryId)) {
+                        selectedProductIds.push(selectedProducts[categoryId].productId);
                     }
-                },
-                error: function(error) {
-                    console.error("Error:", error);
-                    alert('There was an error adding products to the cart.');
                 }
-            });
+    
+                // Then add any checked products from the checkbox list
+                $('.intel-product-checkbox:checked').each(function() {
+                    selectedProductIds.push($(this).val());
+                });
+    
+                // If no products are selected, alert the user
+                if (selectedProductIds.length === 0) {
+                    alert("Please select at least one product.");
+                    return;
+                }
+    
+                // Get CSRF token
+                const csrftoken = getCookie('csrftoken');
+    
+                // Send AJAX request to add selected products to cart
+                $.ajax({
+                    url: '/custom-pc-build/intel/add-to-cart/',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    data: {
+                        'product_ids[]': selectedProductIds,
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.href = response.redirect_url || '/cart/';
+                        }
+                    },
+                    error: function(error) {
+                        console.error("Error:", error);
+                        alert('There was an error adding products to the cart.');
+                    }
+                });
+            {% else %}
+                // If the user is not logged in, redirect to the login page
+                window.location.href = "{% url 'login' %}?next={% url 'custom_pc_build' %}";
+            {% endif %}
         }
-        
     
         function getCookie(name) {
             let cookieValue = null;
@@ -200,6 +203,7 @@
             return cookieValue;
         }
     </script>
+    
     
 </body>
 </html>
