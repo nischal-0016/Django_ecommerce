@@ -28,23 +28,29 @@
 
         <h3>Order Details:</h3>
         <table>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>
-            {% for item in cart_items %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>Rs.{{ item.product.price }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="2" style="text-align: right; font-weight: bold;">Total Price:</td>
-                <td><strong>Rs.{{ order.total_price }}</strong></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <!-- Using methods get_name and get_price from the cart item -->
+                    <td>{{ item.get_name }}</td>  
+                    <td>{{ item.quantity }}</td>
+                    <td>Rs. {{ item.get_price }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2" style="text-align: right; font-weight: bold;">Total Price:</td>
+                    <td><strong>Rs.{{ order.total_price }}</strong></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </body>
 </html>
+ 

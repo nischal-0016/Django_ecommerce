@@ -51,7 +51,7 @@ nav a, .logout-button, .login-button {
 }
 
 nav a:hover, .logout-button:hover, .login-button:hover {
-    background-color: rgb(159, 13, 13); 
+    background-color: rgb(159, 13, 13);
     border-radius: 5px;
 }
 
@@ -63,169 +63,166 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 }
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-h1 {
-    color: #451b1b;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    position: relative;
-    padding-bottom: 10px;
-}
-
-.sidebar {
-    flex: 1 1 250px;
-    padding: 25px;
-    background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    margin-right: 20px;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar li {
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    width: 80%;
+    margin: auto;
     background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.sidebar li.selected {
-    background: linear-gradient(135deg, #80341f 0%, #451b1b 100%);
-    color: #fff;
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(128,52,31,0.2);
-}
-
-.sidebar li:hover:not(.selected) {
-    background: #f0f0f0;
-    transform: translateX(5px);
-}
-
-.sidebar li a {
-    text-decoration: none;
-    color: inherit;
-    font-weight: bold;
-    display: block;
-}
-
-.product-list {
-    flex: 3;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 10px;
-}
-
-.product-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: white;
-    border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.product-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
-.product-item img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-}
-
-.product-item:hover img {
-    transform: scale(1.05);
-}
-
-.product-btn {
-    background-color: #80341f;
-    color: white;
-    padding: 10px 20px;
-    border: none;
     border-radius: 10px;
-    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.components-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.components-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.category-name {
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    width: 20%;
 }
 
-.product-btn:hover {
-    background-color: #5c2b1b;
-    transform: scale(1.05);
+.selected-product {
+    width: 50%;
+    color: #888;
+    background: #f9f9f9;
+    padding: 15px;
 }
 
-.popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px; 
-    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-    color: white;
-    padding: 15px 25px;
+.select-btn {
+    width: 30%;
+    text-align: right;
+}
+
+.select-btn button {
+    color: red;
     border: none;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transform: translateY(15px); 
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 1000;
-    font-weight: bold;
-    font-size: 1rem;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-.popup.show {
-    opacity: 1;
-    transform: translateY(0); 
+.dropdown-container {
+    padding: 10px;
+    background-color: #f5f7fa;
 }
+
+.dropdown {
+    display: none;
+    position: relative;
+    background: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.dropdown-item button {
+    margin-left: auto;
+    padding: 5px 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.add-to-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background: green;
+    color: white;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Ensure dropdown content pushes categories down */
+.dropdown-row {
+    display: none;
+}
+
+.selected-product img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.selected-product-row {
+    padding: 20px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+
+#amd-product-form button {
+    color: white;
+    background-color: black;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 15px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px; /* Rounded corners */
+}
+
+#amd-product-form button:hover {
+    background-color: rgb(159, 13, 13); /* Red on hover */
+    border-radius: 10px; /* Keep rounded corners on hover */
+}
+
+
+
 
 /* Footer Section */
 footer {
-    background-color: #f1f1f1; 
+    background-color: #f1f1f1;
     padding: 40px 20px;
     text-align: center;
-    border-top: 2px solid #ddd; 
+    border-top: 2px solid #ddd;
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: right;
     margin-bottom: 20px;
 }
 
 .footer-logo img {
-    max-width: 180px; 
+    max-width: 180px;
     height: auto;
 }
 
 .footer-message {
     max-width: 800px;
-    text-align: left; 
+    text-align: left;
     font-size: 14px;
-    color: #333; 
+    color: #333;
 }
 
 .footer-message p {
@@ -237,23 +234,7 @@ footer {
     color: #777;
 }
 
-
 @media (max-width: 768px) {
-    .container {
-        margin: 15px;
-        padding: 15px;
-    }
-
-    .sidebar {
-        flex: 1 1 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-
-    .product-list {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 15px;
-    }
 
     nav {
         flex-wrap: wrap;

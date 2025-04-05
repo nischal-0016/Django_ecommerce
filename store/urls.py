@@ -22,7 +22,6 @@ urlpatterns = [
 
     # Cart management URLs
     path('cart/', views.cart_view, name='cart'),  # Cart page
-
     path('cart/remove/<str:item_id>/', views.remove_from_cart, name='remove_from_cart'),  # Remove item from cart
 
     # User Authentication URLs
@@ -35,16 +34,24 @@ urlpatterns = [
 
     # Custom PC Build URLs
     path('custom-pc-build/', views.custom_pc_build, name='custom_pc_build'),  # Custom PC build main page
-    path('custom-pc-build/intel/', views.intel_build, name='intel_build'),  # Intel-based custom PC build
-    path('custom-pc-build/amd/', views.amd_pc_build, name='amd_build'),  # AMD-based custom PC build
+    path('custom-pc-build/intel/', views.intel_build, name='intel_build'),
+    path('custom-pc-build/intel/product/<int:product_id>/add-to-cart/', views.add_intel_product_to_cart, name='add_intel_product_to_cart'),
+    path('custom-pc-build/intel/add-to-cart/', views.add_selected_intel_products_to_cart, name='add_selected_intel_products_to_cart'),
 
+
+    # AMD build
+    path('custom-pc-build/amd/', views.amd_build, name='amd_build'),
+    path('custom-pc-build/amd/product/<str:product_id>/add-to-cart/', views.add_amd_product_to_cart, name='add_amd_product_to_cart'),
+    path('custom-pc-build/amd/add-to-cart/', views.add_selected_amd_products_to_cart, name='add_selected_amd_products_to_cart'),
+
+
+
+
+    # Order & Payment
     path('order/', views.order_page, name='order'),
-
     path('payment/', payment_view, name='payment'),
-
     path('cash_on_delivery/', views.cash_on_delivery, name='cash_on_delivery'),
-
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

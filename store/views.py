@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.conf import settings
 import pdfkit,os
+from django.views.decorators.http import require_POST
 
 
 # View to list all products
@@ -76,37 +77,6 @@ def profile(request):
         'profile_form': profile_form,
     })
 
-# View for Intel PC build page
-def intel_build(request):
-    category_id = request.GET.get('category_id')
-    categories = IntelCategory.objects.all()
-    
-    if category_id:
-        products = IntelProduct.objects.filter(category_id=category_id)
-    else:
-        products = []
-
-    context = {
-        'categories': categories,
-        'products': products,
-    }
-    return render(request, 'store/intel_build.html', context)
-
-# View for AMD PC build page
-def amd_pc_build(request):
-    category_id = request.GET.get('category_id')
-    categories = AMDCategory.objects.all()
-    
-    if category_id:
-        products = AMDProduct.objects.filter(category_id=category_id)
-    else:
-        products = []
-
-    context = {
-        'categories': categories,
-        'products': products,
-    }
-    return render(request, 'store/amd_build.html', context)
 
 # Cart view to display cart items
 @login_required
@@ -138,28 +108,8 @@ def add_to_cart(request, product_id):
 
     return JsonResponse({'success': False, 'message': 'Invalid request'})
 
-@login_required
-def add_intel_product_to_cart(request, product_id):
-    product = get_object_or_404(IntelProduct, id=product_id)
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
 
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    return redirect('cart')
 
-# Add AMD product to cart
-@login_required
-def add_amd_product_to_cart(request, product_id):
-    product = get_object_or_404(AMDProduct, id=product_id)
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, amd_product=product)
-
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    return redirect('cart')
 
 
 # Remove item from cart
@@ -243,7 +193,8 @@ def payment_view(request):
 def cash_on_delivery(request):
     cart_items = CartItem.objects.filter(cart__user=request.user)
 
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    # Use the total_price method that's already in your model
+    total_price = sum(item.total_price() for item in cart_items)
 
     order = Order.objects.create(
         user=request.user,
@@ -270,3 +221,129 @@ def cash_on_delivery(request):
     pdf_url = f"{settings.MEDIA_URL}invoices/{pdf_file_name}"
 
     return render(request, 'store/cashondelivery.html', {'pdf_url': pdf_url})
+
+def intel_build(request):
+    categories = IntelCategory.objects.prefetch_related('intel_products').all()
+    products = IntelProduct.objects.all()  # Add this line
+
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'store/intel_build.html', context)
+
+
+@login_required
+def add_intel_product_to_cart(request, product_id):
+    if request.method == "POST":
+        product = get_object_or_404(IntelProduct, id=product_id)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        
+        # Create or update CartItem for the Intel product
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
+
+        # If the cart item already exists, increment its quantity
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        # Return a JSON response with success and cart URL to redirect
+        return JsonResponse({"success": True, "redirect_url": '/cart/'})
+    
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+def get_intel_products_by_category(request, category_id):
+    products = IntelProduct.objects.filter(category_id=category_id)
+    data = []
+
+    for product in products:
+        data.append({
+            'id': product.id,
+            'name': product.name,
+            'price': float(product.price),
+            'image_url': product.image.url if product.image else '',
+        })
+
+    return JsonResponse({'products': data})
+
+
+@require_POST
+@login_required
+def add_selected_intel_products_to_cart(request):
+    # Retrieve the list of selected product IDs from the request
+    product_ids = request.POST.getlist('product_ids[]')
+    
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    
+    for product_id in product_ids:
+        product = get_object_or_404(IntelProduct, id=product_id)
+        
+        # Get or create a CartItem for each selected Intel product
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
+        
+        # If the product already exists in the cart, increment the quantity
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+    
+    return JsonResponse({'success': True, 'message': 'Products added to cart successfully.', 'redirect_url': '/cart/'})
+
+def amd_build(request):
+    categories = AMDCategory.objects.prefetch_related('amd_products').all()
+    products = AMDProduct.objects.all()
+
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'store/amd_build.html', context)
+
+@login_required
+def add_amd_product_to_cart(request, product_id):
+    if request.method == "POST":
+        product = get_object_or_404(AMDProduct, id=product_id)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+
+        # Create or update CartItem for the AMD product
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, amd_product=product)
+
+        # If the cart item already exists, increment its quantity
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return JsonResponse({"success": True, "redirect_url": '/cart/'})
+    
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+def get_amd_products_by_category(request, category_id):
+    products = AMDProduct.objects.filter(category_id=category_id)
+    data = []
+
+    for product in products:
+        data.append({
+            'id': product.id,
+            'name': product.name,
+            'price': float(product.price),
+            'image_url': product.image.url if product.image else '',
+        })
+
+    return JsonResponse({'products': data})
+
+@require_POST
+@login_required
+def add_selected_amd_products_to_cart(request):
+    product_ids = request.POST.getlist('product_ids[]')
+    
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    
+    for product_id in product_ids:
+        product = get_object_or_404(AMDProduct, id=product_id)
+        
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, amd_product=product)
+        
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+    return JsonResponse({'success': True, 'message': 'Products added to cart successfully.', 'redirect_url': '/cart/'})
