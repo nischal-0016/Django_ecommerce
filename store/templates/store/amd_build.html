@@ -135,27 +135,22 @@
         function addSelectedAmdProductsToCart() {
             var selectedProductIds = [];
             
-            // Check if the user is authenticated
             {% if user.is_authenticated %}
-                // Collect selected products from dropdown selections
                 for (let categoryId in selectedProducts) {
                     if (selectedProducts.hasOwnProperty(categoryId)) {
                         selectedProductIds.push(selectedProducts[categoryId].productId);
                     }
                 }
     
-                // Add any checked products from the checkbox list
                 $('.amd-product-checkbox:checked').each(function() {
                     selectedProductIds.push($(this).val());
                 });
     
-                // If no products are selected, alert the user
                 if (selectedProductIds.length === 0) {
                     alert("Please select at least one product.");
                     return;
                 }
     
-                // Get CSRF token
                 const csrftoken = getCookie('csrftoken');
     
                 // Send AJAX request to add selected products to cart
@@ -179,7 +174,6 @@
                     }
                 });
             {% else %}
-                // Redirect to login page if user is not logged in
                 window.location.href = "{% url 'login' %}";
             {% endif %}
         }

@@ -55,7 +55,6 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     border-radius: 5px;
 }
 
-/* Logout Button */
 .logout-button {
     background: none;
     border: none;
