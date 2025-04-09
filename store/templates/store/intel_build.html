@@ -47,6 +47,10 @@
         </div>
     </header>
 
+    <div class="build-heading">
+        <h1>Build Your PC</h1>
+    </div>
+
     <div class="container">
         <h2>Components</h2>
         <table class="components-table">
@@ -133,11 +137,9 @@
             // Hide dropdown after selection
             document.getElementById("dropdown-row-" + categoryId).style.display = "none";
     
-            // Don't add to cart or redirect here
         }
     
         function addSelectedIntelProductsToCart() {
-            // Check if the user is logged in by verifying the `user.is_authenticated` value.
             {% if user.is_authenticated %}
                 var selectedProductIds = [];
     
@@ -153,7 +155,6 @@
                     selectedProductIds.push($(this).val());
                 });
     
-                // If no products are selected, alert the user
                 if (selectedProductIds.length === 0) {
                     alert("Please select at least one product.");
                     return;
@@ -183,7 +184,6 @@
                     }
                 });
             {% else %}
-                // If the user is not logged in, redirect to the login page
                 window.location.href = "{% url 'login' %}?next={% url 'custom_pc_build' %}";
             {% endif %}
         }

@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from . import views
 from .views import payment_view
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # Home and Product URLs
@@ -44,13 +45,12 @@ urlpatterns = [
     path('custom-pc-build/amd/product/<str:product_id>/add-to-cart/', views.add_amd_product_to_cart, name='add_amd_product_to_cart'),
     path('custom-pc-build/amd/add-to-cart/', views.add_selected_amd_products_to_cart, name='add_selected_amd_products_to_cart'),
 
-
-
-
     # Order & Payment
     path('order/', views.order_page, name='order'),
     path('payment/', payment_view, name='payment'),
     path('cash_on_delivery/', views.cash_on_delivery, name='cash_on_delivery'),
+
+
 ]
 
 if settings.DEBUG:
