@@ -143,14 +143,12 @@
             {% if user.is_authenticated %}
                 var selectedProductIds = [];
     
-                // First, collect all products from the dropdown selections
                 for (let categoryId in selectedProducts) {
                     if (selectedProducts.hasOwnProperty(categoryId)) {
                         selectedProductIds.push(selectedProducts[categoryId].productId);
                     }
                 }
     
-                // Then add any checked products from the checkbox list
                 $('.intel-product-checkbox:checked').each(function() {
                     selectedProductIds.push($(this).val());
                 });
