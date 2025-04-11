@@ -93,8 +93,6 @@
         
     </div>
 
-
-
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
@@ -126,6 +124,12 @@
         }
     
         let selectedProducts = {};
+        let allCategories = [];
+        
+        // Initialize allCategories array with category IDs
+        {% for category in categories %}
+            allCategories.push("{{ category.id }}");
+        {% endfor %}
     
         function selectProduct(categoryId, productId, productName, productImage) {
             let selectedField = document.getElementById("selected-" + categoryId);
@@ -136,11 +140,18 @@
     
             // Hide dropdown after selection
             document.getElementById("dropdown-row-" + categoryId).style.display = "none";
-    
         }
     
         function addSelectedIntelProductsToCart() {
             {% if user.is_authenticated %}
+                // Check if all categories have a product selected
+                const missingCategories = allCategories.filter(categoryId => !selectedProducts[categoryId]);
+                
+                if (missingCategories.length > 0) {
+                    alert("Please select all components before adding to cart.");
+                    return;
+                }
+                
                 var selectedProductIds = [];
     
                 for (let categoryId in selectedProducts) {
@@ -152,11 +163,6 @@
                 $('.intel-product-checkbox:checked').each(function() {
                     selectedProductIds.push($(this).val());
                 });
-    
-                if (selectedProductIds.length === 0) {
-                    alert("Please select at least one product.");
-                    return;
-                }
     
                 // Get CSRF token
                 const csrftoken = getCookie('csrftoken');
@@ -201,7 +207,5 @@
             return cookieValue;
         }
     </script>
-    
-    
 </body>
 </html>

@@ -124,6 +124,12 @@
         }
     
         let selectedProducts = {};
+        let allCategories = [];
+        
+        // Initialize allCategories array with category IDs
+        {% for category in categories %}
+            allCategories.push("{{ category.id }}");
+        {% endfor %}
     
         function selectProduct(categoryId, productId, productName, productImage) {
             let selectedField = document.getElementById("selected-" + categoryId);
@@ -137,9 +143,17 @@
         }
         
         function addSelectedAmdProductsToCart() {
-            var selectedProductIds = [];
-            
             {% if user.is_authenticated %}
+                // Check if all categories have a product selected
+                const missingCategories = allCategories.filter(categoryId => !selectedProducts[categoryId]);
+                
+                if (missingCategories.length > 0) {
+                    alert("Please select all components before adding to cart.");
+                    return;
+                }
+                
+                var selectedProductIds = [];
+                
                 for (let categoryId in selectedProducts) {
                     if (selectedProducts.hasOwnProperty(categoryId)) {
                         selectedProductIds.push(selectedProducts[categoryId].productId);
@@ -149,11 +163,6 @@
                 $('.amd-product-checkbox:checked').each(function() {
                     selectedProductIds.push($(this).val());
                 });
-    
-                if (selectedProductIds.length === 0) {
-                    alert("Please select at least one product.");
-                    return;
-                }
     
                 const csrftoken = getCookie('csrftoken');
     
@@ -178,7 +187,7 @@
                     }
                 });
             {% else %}
-                window.location.href = "{% url 'login' %}";
+                window.location.href = "{% url 'login' %}?next={% url 'custom_pc_build' %}";
             {% endif %}
         }
         
