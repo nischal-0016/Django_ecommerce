@@ -20,7 +20,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', blank=True, null=True, help_text="Upload an image of the product")
 
     def __str__(self):
-        return f"{self.name} - ${self.price:.2f}"
+        return f"{self.name} - Rs.{self.price:.2f}"
 
 # Separate category model for INTEL products
 class IntelCategory(models.Model):
@@ -39,7 +39,7 @@ class IntelProduct(models.Model):
     image = models.ImageField(upload_to='intel_products/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} - ${self.price:.2f}"
+        return f"{self.name} - Rs.{self.price:.2f}"
     
 # Separate category model for AMD products
 class AMDCategory(models.Model):
@@ -58,7 +58,7 @@ class AMDProduct(models.Model):
     image = models.ImageField(upload_to='amd_products/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} - ${self.price:.2f}"
+        return f"{self.name} - Rs.{self.price:.2f}"
     
 
 class Cart(models.Model):
