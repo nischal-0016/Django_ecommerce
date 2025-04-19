@@ -60,6 +60,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 
 /* Logout Button */
 .logout-button {
+    font-family: 'Oxanium', sans-serif;
     background: none;
     border: none;
     cursor: pointer;

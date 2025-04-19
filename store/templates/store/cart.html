@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart - PCGeek</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/cart.css' %}">
 </head>
 <script>
@@ -87,26 +88,21 @@
                         <div class="item-details">
                             {% if item.product %}
                                 <strong>{{ item.product.name }}</strong>
-                                <div>Price: Rs. {{ item.product.price }}</div>
                             {% elif item.intel_product %}
                                 <strong>{{ item.intel_product.name }}</strong>
-                                <div>Price:Rs. {{ item.intel_product.price }}</div>
                             {% elif item.amd_product %}
                                 <strong>{{ item.amd_product.name }}</strong>
-                                <div>Price: Rs. {{ item.amd_product.price }} </div>
                             {% endif %}
                         </div>
                         
                         <div class="quantity-controls">
-                            <span>Quantity: {{ item.quantity }}</span>
                             <button class="delete-button" onclick="deleteItem({{ item.id }})">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
                         
-                        
                         <div class="item-total">
-                            Total: <strong><span id="total-{{ item.id }}">Rs. {{ item.total_price }} </span></strong>
+                            <strong><span id="total-{{ item.id }}">Rs. {{ item.total_price }}</span></strong>
                         </div>
                     </li>
                 {% endfor %}

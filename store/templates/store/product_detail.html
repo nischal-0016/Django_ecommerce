@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/productdetail.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
     <title>{{ product.name }} - PCGeek</title>
     <script>
         const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
@@ -55,6 +57,55 @@
                 popup.classList.remove('show');
             }, 2000);
         }
+        
+        function formatNepalPrice(price) {
+            const priceStr = parseFloat(price).toFixed(2);
+            const parts = priceStr.split('.');
+            const integerPart = parts[0];
+            const decimalPart = parts[1];
+            
+            let formattedInteger = '';
+            let counter = 0;
+            
+            for (let i = integerPart.length - 1; i >= 0; i--) {
+                counter++;
+                formattedInteger = integerPart[i] + formattedInteger;
+                
+                if (counter === 3 && i !== 0) {
+                    formattedInteger = ',' + formattedInteger;
+                    counter = 0;
+                } else if (counter === 2 && i !== 0 && formattedInteger.includes(',')) {
+                    formattedInteger = ',' + formattedInteger;
+                    counter = 0;
+                }
+            }
+            
+            return formattedInteger + '.' + decimalPart;
+        }
+        
+        window.addEventListener('DOMContentLoaded', function() {
+            const description = `{{ product.description|escapejs }}`;
+            const descriptionContainer = document.getElementById('description-list');
+            
+            if (description && descriptionContainer) {
+                const lines = description.split('\n');
+                descriptionContainer.innerHTML = '';
+                
+                lines.forEach(line => {
+                    if (line.trim()) {
+                        const li = document.createElement('li');
+                        li.textContent = line.trim();
+                        descriptionContainer.appendChild(li);
+                    }
+                });
+            }
+            
+            const priceElement = document.getElementById('product-price');
+            if (priceElement) {
+                const price = parseFloat(priceElement.getAttribute('data-price'));
+                priceElement.textContent = 'Rs. ' + formatNepalPrice(price);
+            }
+        });
     </script>
 </head>
 <body>
@@ -101,8 +152,13 @@
         
             <ul class="product-description">
                 <li><strong>Product Name:</strong> {{ product.name }}</li>
-                <li><strong>Price:</strong> Rs. {{ product.price }}</li>
-                <li><strong>Description:</strong> {{ product.description }}</li>
+                <li><strong>Price:</strong> <span id="product-price" data-price="{{ product.price }}">Rs. {{ product.price }}</span></li>
+                <li>
+                    <strong>Description:</strong>
+                    <ul id="description-list" class="spec-points">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </li>
             </ul>
         
             <label for="quantity-input">Quantity:</label> 
@@ -115,7 +171,6 @@
             </select>
             <button type="button" onclick="addToCart('{{ product.id }}')" class="add-to-cart-button">Add to Cart</button>
         </div>
-        
     </main>
 
     <div class="cart-popup"></div>

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
     <title>Invoice</title>
     <style>
         body { font-family: Arial, sans-serif; }
@@ -38,7 +39,6 @@
             <tbody>
                 {% for item in cart_items %}
                 <tr>
-                    <!-- Using methods get_name and get_price from the cart item -->
                     <td>{{ item.get_name }}</td>  
                     <td>{{ item.quantity }}</td>
                     <td>Rs. {{ item.get_price }}</td>

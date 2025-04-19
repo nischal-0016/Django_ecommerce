@@ -7,6 +7,7 @@
     <title>Payment</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/payment.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
 
 </head>
 <body>
@@ -48,10 +49,10 @@
     <div class="container">
         <h1>Select the follwing option to make payment.</h1>
         <div class="payment-options">
-            <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">
+            {% comment %} <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">
                 <img src="{% static 'images/esewa.png' %}" alt="eSewa">
                 <span>eSewa</span>
-            </div>
+            </div> {% endcomment %}
             <div class="payment-option" onclick="redirectToPayment('https://khalti.com/')">
                 <img src="{% static 'images/khalti.png' %}" alt="Khalti">
                 <span>Khalti</span>
