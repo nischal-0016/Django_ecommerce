@@ -153,3 +153,12 @@ if os.path.isfile(WKHTMLTOPDF_PATH):
     PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
 else:
     print(f"wkhtmltopdf executable not found at: {WKHTMLTOPDF_PATH}")
+
+# Khalti Settings
+
+KHALTI_API_URL = 'https://dev.khalti.com/api/v2/'
+WEBSITE_URL = 'http://127.0.0.1:8000'
+
+
+KHALTI_SECRET_KEY = '127543de29284292af36e9235ff99053'
+KHALTI_PUBLIC_KEY = '1fd32c0d601d41719602b9b49b03559b'

@@ -131,7 +131,27 @@ class Order(models.Model):
     address = models.CharField(max_length=255, blank=True, default='Not Provided')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50)
-    status = models.CharField(max_length=20, default="Pending") 
+    status = models.CharField(max_length=20, default="Pending")
     created_at = models.DateTimeField(auto_now_add=True)
     invoice = models.FileField(upload_to='invoices/', blank=True, null=True)
+    khalti_token = models.CharField(max_length=36, blank=True, null=True)  # To store UUID for Khalti
 
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    intel_product = models.ForeignKey(IntelProduct, on_delete=models.CASCADE, null=True, blank=True)
+    amd_product = models.ForeignKey(AMDProduct, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        if self.product:
+            return f"{self.quantity} of {self.product.name} in Order {self.order.id}"
+        elif self.intel_product:
+            return f"{self.quantity} of {self.intel_product.name} in Order {self.order.id}"
+        elif self.amd_product:
+            return f"{self.quantity} of {self.amd_product.name} in Order {self.order.id}"
+        return f"Unknown item in Order {self.order.id}"

@@ -7,8 +7,42 @@
     <title>Payment</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/payment.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
 
+    <style>
+        .payment-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .payment-button img {
+            max-width: 100px;
+            margin-bottom: 5px;
+        }
+        .payment-button span {
+            font-size: 16px;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -33,7 +67,6 @@
                 {% else %}
                 <a href="{% url 'login' %}" class="profile-button">Profile</a>
                 {% endif %}
-    
                 {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}" style="display:inline;">
                     {% csrf_token %}
@@ -47,34 +80,45 @@
     </header>
 
     <div class="container">
-        <h1>Select the follwing option to make payment.</h1>
+        <h1>Select a payment option</h1>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if user.is_authenticated %}
         <div class="payment-options">
-            {% comment %} <div class="payment-option" onclick="redirectToPayment('https://esewa.com.np/')">
-                <img src="{% static 'images/esewa.png' %}" alt="eSewa">
-                <span>eSewa</span>
-            </div> {% endcomment %}
-            <div class="payment-option" onclick="redirectToPayment('https://khalti.com/')">
-                <img src="{% static 'images/khalti.png' %}" alt="Khalti">
-                <span>Khalti</span>
+            <div class="payment-option">
+                <form method="post" action="{% url 'initiate_khalti_cart_payment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="amount" value="{{ cart_total }}">
+                    <input type="hidden" name="name" value="{{ user.get_full_name|default:user.username }}">
+                    <input type="hidden" name="email" value="{{ user.email }}">
+                    <button type="submit" class="payment-button">
+                        <img src="{% static 'images/khalti.png' %}" alt="Khalti">
+                        <span>Khalti</span>
+                    </button>
+                </form>
             </div>
             <div class="payment-option" onclick="redirectToPayment('cash_on_delivery')">
                 <img src="{% static 'images/COD.jpg' %}" alt="Cash on Delivery">
                 <span>Cash on Delivery</span>
             </div>
         </div>
-        
+        {% else %}
+        <p>Please <a href="{% url 'login' %}?next={% url 'payment' %}">login</a> to proceed with payment.</p>
+        {% endif %}
     </div>
 
     <script>
         function redirectToPayment(url) {
             if (url === 'cash_on_delivery') {
                 window.location.href = "{% url 'cash_on_delivery' %}";
-            } else {
-                window.location.href = url;
             }
         }
     </script>
-    
 
     <footer>
         <div class="footer-content">
@@ -87,7 +131,7 @@
         </div>
     
         <div class="footer-bottom">
-            <p>&copy; 2024 PCGeek - All rights reserved</p>
+            <p>© 2024 PCGeek - All rights reserved</p>
         </div>
     </footer>
 </body>

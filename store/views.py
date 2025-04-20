@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order
+from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order, OrderItem
 from .forms import CustomUserCreationForm, UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -347,3 +347,167 @@ def add_selected_amd_products_to_cart(request):
             cart_item.save()
 
     return JsonResponse({'success': True, 'message': 'Products added to cart successfully.', 'redirect_url': '/cart/'})
+
+
+import requests
+import uuid
+from django.http import HttpResponseBadRequest
+from django.urls import reverse
+
+@login_required
+def initiate_khalti_cart_payment(request):
+    if request.method == 'POST':
+        cart = Cart.objects.get(user=request.user)
+        cart_items = cart.cart_items.all()
+        cart_total = cart.total_price()
+
+        if not cart_items:
+            messages.error(request, "Your cart is empty. Add items to proceed with payment.")
+            return redirect('cart')
+
+        amount = float(cart_total)
+        name = request.user.get_full_name() or request.user.username
+        email = request.user.email
+        phone = request.user.profile.contact_number or ""
+
+        # Convert amount to paisa
+        amount_in_paisa = int(amount * 100)
+
+        # Generate unique order ID
+        order_id = str(uuid.uuid4())
+
+        # Create Order record
+        order = Order.objects.create(
+            user=request.user,
+            address=request.user.profile.address or "Not Provided",
+            total_price=amount,
+            payment_method="Khalti",
+            status="Pending",
+            khalti_token=order_id  # Store the UUID
+        )
+
+        # Copy cart items to OrderItem
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                intel_product=item.intel_product,
+                amd_product=item.amd_product,
+                quantity=item.quantity,
+                price=item.get_price()
+            )
+
+        # Prepare customer info dictionary
+        customer_info = {
+            "name": name,
+            "email": email,
+        }
+        if phone and phone.strip():
+            customer_info["phone"] = phone
+
+        # Prepare Khalti payload
+        payload = {
+            "return_url": settings.WEBSITE_URL + reverse('verify_khalti_cart_payment'),
+            "website_url": settings.WEBSITE_URL,
+            "amount": amount_in_paisa,
+            "purchase_order_id": order_id,
+            "purchase_order_name": f"Cart Order {order.id}",
+            "customer_info": customer_info
+        }
+
+        headers = {
+            "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        try:
+            response = requests.post(
+                f"{settings.KHALTI_API_URL}epayment/initiate/",
+                json=payload,
+                headers=headers
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            if 'payment_url' in data:
+                return redirect(data['payment_url'])
+            else:
+                messages.error(request, "Failed to initiate payment. Please try again.")
+                order.delete()
+                return redirect('cart')
+
+        except requests.RequestException as e:
+            messages.error(request, f"Payment initiation failed: {str(e)}")
+            order.delete()
+            return redirect('cart')
+
+    return HttpResponseBadRequest("Invalid request method.")
+
+@login_required
+def verify_khalti_cart_payment(request):
+    pidx = request.GET.get('pidx')
+    status = request.GET.get('status')
+    transaction_id = request.GET.get('transaction_id')
+    purchase_order_id = request.GET.get('purchase_order_id')
+
+    if not pidx:
+        messages.error(request, "Invalid payment verification request.")
+        return redirect('cart')
+
+    lookup_url = f"{settings.KHALTI_API_URL}epayment/lookup/"
+    headers = {
+        "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {"pidx": pidx}
+
+    try:
+        response = requests.post(lookup_url, json=payload, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+
+        try:
+            order = Order.objects.get(khalti_token=purchase_order_id)  # Use khalti_token for lookup
+        except Order.DoesNotExist:
+            messages.error(request, "Invalid transaction.")
+            return redirect('cart')
+
+        if data.get('status') == 'Completed':
+            order.status = "Completed"
+            order.save()
+
+            # Clear the cart after successful payment
+            Cart.objects.get(user=request.user).cart_items.all().delete()
+
+            messages.success(
+                request,
+                "Payment successful! Your order has been placed."
+            )
+            return redirect('cart')
+        else:
+            status = data.get('status')
+            if status in ['Expired', 'User canceled']:
+                messages.error(request, f"Payment {status.lower()}. Please try again.")
+                order.delete()
+            elif status == 'Pending':
+                messages.warning(request, "Payment is pending. Please contact support if not resolved soon.")
+            elif status == 'Refunded':
+                messages.error(request, "Payment was refunded. Please contact support.")
+            else:
+                messages.error(request, "Payment failed. Please try again.")
+                order.delete()
+
+            return redirect('cart')
+
+    except requests.RequestException as e:
+        messages.error(request, f"Payment verification failed: {str(e)}")
+        return redirect('cart')
+
+@login_required
+def payment_view(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_total = cart.total_price()
+    except Cart.DoesNotExist:
+        cart_total = 0
+    return render(request, 'store/payment.html', {'cart_total': cart_total})

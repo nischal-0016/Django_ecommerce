@@ -49,7 +49,9 @@ urlpatterns = [
     path('order/', views.order_page, name='order'),
     path('payment/', payment_view, name='payment'),
     path('cash_on_delivery/', views.cash_on_delivery, name='cash_on_delivery'),
-
+    path('initiate-khalti-cart-payment/', views.initiate_khalti_cart_payment, name='initiate_khalti_cart_payment'),
+    path('verify-khalti-cart-payment/', views.verify_khalti_cart_payment, name='verify_khalti_cart_payment'),
+    path('payment/', views.payment_view, name='payment'),
 
 ]
 
