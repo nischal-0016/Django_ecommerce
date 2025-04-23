@@ -10,6 +10,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import pdfkit,os
 from django.views.decorators.http import require_POST
+import requests
+import uuid
+from django.http import HttpResponseBadRequest
+from django.urls import reverse
 
 
 # View to list all products
@@ -193,7 +197,6 @@ def payment_view(request):
 def cash_on_delivery(request):
     cart_items = CartItem.objects.filter(cart__user=request.user)
 
-    # Use the total_price method that's already in your model
     total_price = sum(item.total_price() for item in cart_items)
 
     order = Order.objects.create(
@@ -214,7 +217,6 @@ def cash_on_delivery(request):
     # Generate PDF
     pdfkit.from_string(invoice_html, pdf_file_path, configuration=settings.PDFKIT_CONFIG)
 
-    # Save the file path in the database
     order.invoice.name = f"invoices/{pdf_file_name}"
     order.save()
 
@@ -224,7 +226,7 @@ def cash_on_delivery(request):
 
 def intel_build(request):
     categories = IntelCategory.objects.prefetch_related('intel_products').all()
-    products = IntelProduct.objects.all()  # Add this line
+    products = IntelProduct.objects.all() 
 
     context = {
         'categories': categories,
@@ -238,15 +240,12 @@ def add_intel_product_to_cart(request, product_id):
         product = get_object_or_404(IntelProduct, id=product_id)
         cart, _ = Cart.objects.get_or_create(user=request.user)
         
-        # Create or update CartItem for the Intel product
         cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
 
-        # If the cart item already exists, increment its quantity
         if not created:
             cart_item.quantity += 1
             cart_item.save()
 
-        # Return a JSON response with success and cart URL to redirect
         return JsonResponse({"success": True, "redirect_url": '/cart/'})
     
     return JsonResponse({"error": "Invalid request"}, status=400)
@@ -271,7 +270,6 @@ def get_intel_products_by_category(request, category_id):
 @require_POST
 @login_required
 def add_selected_intel_products_to_cart(request):
-    # Retrieve the list of selected product IDs from the request
     product_ids = request.POST.getlist('product_ids[]')
     
     cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -279,10 +277,8 @@ def add_selected_intel_products_to_cart(request):
     for product_id in product_ids:
         product = get_object_or_404(IntelProduct, id=product_id)
         
-        # Get or create a CartItem for each selected Intel product
         cart_item, created = CartItem.objects.get_or_create(cart=cart, intel_product=product)
         
-        # If the product already exists in the cart, increment the quantity
         if not created:
             cart_item.quantity += 1
             cart_item.save()
@@ -304,10 +300,8 @@ def add_amd_product_to_cart(request, product_id):
         product = get_object_or_404(AMDProduct, id=product_id)
         cart, _ = Cart.objects.get_or_create(user=request.user)
 
-        # Create or update CartItem for the AMD product
         cart_item, created = CartItem.objects.get_or_create(cart=cart, amd_product=product)
 
-        # If the cart item already exists, increment its quantity
         if not created:
             cart_item.quantity += 1
             cart_item.save()
@@ -349,10 +343,7 @@ def add_selected_amd_products_to_cart(request):
     return JsonResponse({'success': True, 'message': 'Products added to cart successfully.', 'redirect_url': '/cart/'})
 
 
-import requests
-import uuid
-from django.http import HttpResponseBadRequest
-from django.urls import reverse
+
 
 @login_required
 def initiate_khalti_cart_payment(request):
@@ -370,23 +361,19 @@ def initiate_khalti_cart_payment(request):
         email = request.user.email
         phone = request.user.profile.contact_number or ""
 
-        # Convert amount to paisa
         amount_in_paisa = int(amount * 100)
 
-        # Generate unique order ID
         order_id = str(uuid.uuid4())
 
-        # Create Order record
         order = Order.objects.create(
             user=request.user,
             address=request.user.profile.address or "Not Provided",
             total_price=amount,
             payment_method="Khalti",
             status="Pending",
-            khalti_token=order_id  # Store the UUID
+            khalti_token=order_id 
         )
 
-        # Copy cart items to OrderItem
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
@@ -397,7 +384,6 @@ def initiate_khalti_cart_payment(request):
                 price=item.get_price()
             )
 
-        # Prepare customer info dictionary
         customer_info = {
             "name": name,
             "email": email,
@@ -405,7 +391,6 @@ def initiate_khalti_cart_payment(request):
         if phone and phone.strip():
             customer_info["phone"] = phone
 
-        # Prepare Khalti payload
         payload = {
             "return_url": settings.WEBSITE_URL + reverse('verify_khalti_cart_payment'),
             "website_url": settings.WEBSITE_URL,
@@ -467,7 +452,7 @@ def verify_khalti_cart_payment(request):
         data = response.json()
 
         try:
-            order = Order.objects.get(khalti_token=purchase_order_id)  # Use khalti_token for lookup
+            order = Order.objects.get(khalti_token=purchase_order_id) 
         except Order.DoesNotExist:
             messages.error(request, "Invalid transaction.")
             return redirect('cart')
