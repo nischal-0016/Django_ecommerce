@@ -73,6 +73,71 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     color: #333;
 }
 
+/* SweetAlert2 pop-up styles */
+.swal2-popup {
+    font-family: 'Arial', sans-serif !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.swal2-title {
+    font-size: 24px !important;
+    color: #333 !important;
+    font-weight: bold;
+}
+
+.swal2-html-container {
+    font-size: 16px !important;
+    color: #555 !important;
+}
+
+.swal2-confirm {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #0056b3 !important;
+}
+
+.swal2-cancel {
+    background-color: #f44336 !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+}
+
+.swal2-cancel:hover {
+    background-color: #d32f2f !important;
+}
+
+.swal2-popup .swal2-icon {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.swal2-popup .swal2-icon.swal2-warning {
+    background-color: #f9a825 !important;
+    border-radius: 50% !important;
+}
+
+.swal2-popup .swal2-icon.swal2-success {
+    background-color: #4caf50 !important;
+    border-radius: 50% !important;
+}
+
+.swal2-popup .swal2-icon.swal2-error {
+    background-color: #f44336 !important;
+    border-radius: 50% !important;
+}
+
+
 
 .container {
     width: 80%;

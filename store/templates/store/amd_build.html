@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/amdbuild.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
@@ -100,7 +101,8 @@
                 <img src="{% static 'images/logo.png' %}" alt="PCGeek Logo">
             </div>
             <div class="footer-message">
-                <p>Buying a laptop in Nepal can be a tough job. Due to the small market, computer stores always bring just a few models of laptops and all with limited stock. So chances of finding a laptop that fits your requirements are feeble. And if you further look at the laptop price in Nepal, you will be shocked to see it being exorbitantly high. Limited availability and the high price of the laptops has definitely created an inconvenience amongst the customers. With a view to solving this problem, PCGeek was established.</p>
+                <p>Buying a laptop in Nepal can be a tough job. Due to the small market, computer stores always bring just a few models of laptops and all with limited stock. So chances of finding a laptop that fits your requirements are feeble. And if you further look at the laptop price in Nepal, you will be shocked to see it being exorbitantly high. Limited availability and the high price of the laptops has definitely created an inconvenience amongst the customers. With a view to solving this problem, PCGeek was established.</p><br>
+                Contact us at: +9779801234567 or email us at: pcgeek@gmail.com
             </div>
         </div>
     
@@ -114,7 +116,6 @@
             let dropdownRow = document.getElementById("dropdown-row-" + categoryId);
             let dropdown = document.getElementById("dropdown-" + categoryId);
     
-            // Toggle visibility of the dropdown
             if (dropdownRow.style.display === "none" || dropdownRow.style.display === "") {
                 dropdownRow.style.display = "table-row";
                 dropdown.style.display = "block";
@@ -127,7 +128,6 @@
         let selectedProducts = {};
         let allCategories = [];
         
-        // Initialize allCategories array with category IDs
         {% for category in categories %}
             allCategories.push("{{ category.id }}");
         {% endfor %}
@@ -136,38 +136,47 @@
             let selectedField = document.getElementById("selected-" + categoryId);
             selectedField.innerHTML = `<img src="${productImage}" width="40"> ${productName}`;
             
-            // Store selected product
             selectedProducts[categoryId] = { productId, productName, productImage };
             
-            // Hide dropdown after selection
             document.getElementById("dropdown-row-" + categoryId).style.display = "none";
         }
         
         function addSelectedAmdProductsToCart() {
             {% if user.is_authenticated %}
-                // Check if all categories have a product selected
                 const missingCategories = allCategories.filter(categoryId => !selectedProducts[categoryId]);
-                
+
                 if (missingCategories.length > 0) {
-                    alert("Please select all components before adding to cart.");
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Components',
+                        text: 'Please select all components before adding to cart!',
+                        confirmButtonColor: '#007BFF'
+                    });
                     return;
                 }
-                
+
                 var selectedProductIds = [];
-                
+
                 for (let categoryId in selectedProducts) {
                     if (selectedProducts.hasOwnProperty(categoryId)) {
                         selectedProductIds.push(selectedProducts[categoryId].productId);
                     }
                 }
-    
+
                 $('.amd-product-checkbox:checked').each(function() {
                     selectedProductIds.push($(this).val());
                 });
-    
+
                 const csrftoken = getCookie('csrftoken');
-    
-                // Send AJAX request to add selected products to cart
+
+                Swal.fire({
+                    title: 'Adding to Cart...',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    allowOutsideClick: false
+                });
+
                 $.ajax({
                     url: '/custom-pc-build/amd/add-to-cart/',
                     type: 'POST',
@@ -179,12 +188,24 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            window.location.href = response.redirect_url || '/cart/';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Products Added!',
+                                text: 'Your selected AMD products have been added to cart.',
+                                confirmButtonColor: '#28a745'
+                            }).then(() => {
+                                window.location.href = response.redirect_url || '/cart/';
+                            });
                         }
                     },
                     error: function(error) {
                         console.error("Error:", error);
-                        alert('There was an error adding products to the cart.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was an error adding products to the cart.',
+                            confirmButtonColor: '#f44336'
+                        });
                     }
                 });
             {% else %}

@@ -74,6 +74,53 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     color: #333;
 }
 
+/* SweetAlert2 Custom Styling */
+.swal2-popup {
+    border-radius: 15px;
+    font-family: 'Poppins', sans-serif;
+    padding: 1.5rem;
+}
+
+.swal2-title {
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.swal2-html-container {
+    font-size: 1rem;
+    color: #555;
+}
+
+.swal2-confirm {
+    background-color: #007BFF !important; 
+    color: white !important;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+}
+
+.swal2-confirm:hover {
+    background-color: #0056b3 !important;
+}
+
+.swal2-cancel {
+    background-color: #f44336 !important; 
+    color: white !important;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+}
+
+.swal2-cancel:hover {
+    background-color: #c62828 !important;
+}
+
+
 
 .container {
     width: 80%;
