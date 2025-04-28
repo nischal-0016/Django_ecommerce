@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Product, Category, Cart,CartItem, IntelProduct, AMDProduct, IntelCategory, AMDCategory,Order, OrderItem
@@ -111,8 +111,6 @@ def add_to_cart(request, product_id):
         return JsonResponse({'success': True, 'message': 'Product added to cart'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request'})
-
-
 
 
 
@@ -496,3 +494,36 @@ def payment_view(request):
     except Cart.DoesNotExist:
         cart_total = 0
     return render(request, 'store/payment.html', {'cart_total': cart_total})
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        # Verify the old password
+        user = authenticate(username=request.user.username, password=old_password)
+        if user is None:
+            messages.error(request, 'Old password is incorrect.')
+            return render(request, 'store/password_change.html')
+
+        # Check if new passwords match
+        if new_password1 != new_password2:
+            messages.error(request, 'New passwords do not match.')
+            return render(request, 'store/password_change.html')
+
+        if len(new_password1) < 8:
+            messages.error(request, 'New password must be at least 8 characters long.')
+            return render(request, 'store/password_change.html')
+
+        request.user.set_password(new_password1)
+        request.user.save()
+
+        update_session_auth_hash(request, request.user)
+
+        messages.success(request, 'Your password was successfully updated!')
+        return redirect('profile')
+
+    return render(request, 'store/password_change.html')

@@ -23,7 +23,6 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
 
-        # Use get_or_create to avoid duplicate profile creation
         profile, created = Profile.objects.get_or_create(user=user)
         profile.address = self.cleaned_data['address']
         profile.contact_number = self.cleaned_data['contact_number']

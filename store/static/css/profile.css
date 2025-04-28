@@ -99,7 +99,9 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     font-size: 24px; 
     font-weight: 700;
 }
-
+a.btn-primary {
+    text-decoration: none;
+}
 .form-group {
     margin-bottom: 15px; 
 }
