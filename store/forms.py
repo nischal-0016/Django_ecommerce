@@ -40,4 +40,3 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['address', 'contact_number']
-

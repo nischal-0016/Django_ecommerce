@@ -6,3 +6,4 @@ def cart_count(request):
     else:
         count = 0
     return {'cart_count': count}
+
