@@ -55,7 +55,6 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     border-radius: 5px;
 }
 
-/* Logout Button */
 .logout-button {
     font-family: 'Oxanium', sans-serif;
     background: none;
@@ -148,7 +147,6 @@ a.btn-primary {
 }
 
 
-/* Popup Style */
 .popup {
     background-color: rgb(159, 13, 13);
     color: white;

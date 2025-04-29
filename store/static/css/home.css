@@ -175,7 +175,7 @@ main {
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s;
-    margin-top: auto; /* This pushes the link to the bottom */
+    margin-top: auto; 
 }
 
 .product-card a:hover {
