@@ -34,8 +34,6 @@ PCGeek is a comprehensive e-commerce platform tailored for tech enthusiasts look
 - **Backend**: Python, Django
 - **Frontend**: HTML, CSS, JavaScript
 - **Database**: SQLite
-- **Tools**: Git, Trello, GitHub
-
 ---
 
 
