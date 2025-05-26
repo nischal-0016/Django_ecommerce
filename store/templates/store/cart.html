@@ -108,7 +108,7 @@
                 {% endfor %}
             </ul>
             <div class="total-price">
-                <strong>Total Price of Cart: <span id="total-price">Rs. {{ total_price }}</span></strong>
+                <strong>Total Price of Cart: Rs. <span id="total-price">{{ total_price }}</span></strong>
                 <a href="{% url 'order' %}" class="order-button">
                     <i class="fas fa-credit-card"></i> Order
                 </a>
