@@ -172,7 +172,7 @@ nav a:hover, .logout-button:hover, .login-button:hover {
 .select-btn button:hover {
     color: darkred;          
     transform: scale(1.1);    
-    text-decoration: underline; 
+    /* text-decoration: underline;  */
 }
 
 
