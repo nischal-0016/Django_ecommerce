@@ -166,7 +166,15 @@ nav a:hover, .logout-button:hover, .login-button:hover {
     background: none;
     font-size: 16px;
     cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
 }
+
+.select-btn button:hover {
+    color: darkred;          
+    transform: scale(1.1);    
+    text-decoration: underline; 
+}
+
 
 .dropdown-container {
     padding: 10px;

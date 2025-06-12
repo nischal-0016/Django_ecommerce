@@ -52,7 +52,8 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+            next = request.GET.get('next', 'home')
+            return redirect(next)
         else:
             if not User.objects.filter(username=username).exists():
                 messages.info(request, 'This username does not exist. Please register.')
