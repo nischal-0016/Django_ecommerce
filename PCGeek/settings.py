@@ -15,26 +15,16 @@ from django.contrib.messages import constants as messages
 import os
 import pdfkit
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-@d!a*h!@*@-^j5h&h$6)dfuw*zhpr!g#ztx^8e2h4=kk!hb9n3'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
 INSTALLED_APPS = [
-    'grappelli',  
+    # 'grappelli',  
     'django.contrib.admin',  
     'django.contrib.humanize',
     'django.contrib.auth',
